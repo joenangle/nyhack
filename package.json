@@ -7,6 +7,6 @@
     "build": "echo 'No build needed for static site'"
   },
   "author": "Your Name",
-  "license": "MIT"
-  ,"dependencies": {}
+  "license": "MIT",
+  "dependencies": {}
 }
