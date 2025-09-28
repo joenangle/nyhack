@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioSCape Data Processor - Real Version</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #667eea; }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+        .file-input-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .file-input-group label {
+            min-width: 200px;
+            font-weight: 500;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover { background: #5a67d8; }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .debug {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🗺️ BioSCape Data Processor - Actual Data Version</h1>
+    
+    <div class="section">
+        <h2>Upload Your BioSCape Data Files</h2>
+        <div id="fileInputs">
+            <div class="file-input-group">
+                <label>KML 2022 Boundaries:</label>
+                <input type="file" id="kml2022" accept=".kml">
+            </div>
+            <div class="file-input-group">
+                <label>KML 2023 Boundaries:</label>
+                <input type="file" id="kml2023" accept=".kml">
+            </div>
+            <div class="file-input-group">
+                <label>Line Intercept CSV:</label>
+                <input type="file" id="lineIntercept" accept=".csv">
+            </div>
+            <div class="file-input-group">
+                <label>Plot Coverage CSV:</label>
+                <input type="file" id="plotCoverage" accept=".csv">
+            </div>
+            <div class="file-input-group">
+                <label>Site Data CSV:</label>
+                <input type="file" id="siteData" accept=".csv">
+            </div>
+            <div class="file-input-group">
+                <label>Rarefaction CSV:</label>
+                <input type="file" id="rarefaction" accept=".csv">
+            </div>
+        </div>
+        
+        <button onclick="processData()">Process Real Data</button>
+        <button onclick="clearAll()">Clear</button>
+        <div id="status"></div>
+    </div>
+
+    <div class="section" id="debugSection" style="display: none;">
+        <h2>Data Processing Debug Info</h2>
+        <div class="debug" id="debug"></div>
+    </div>
+    
+    <div class="section" id="statsSection" style="display: none;">
+        <h2>Actual Data Summary</h2>
+        <div class="stats-grid" id="stats"></div>
+        <div id="plotTable"></div>
+    </div>
+    
+    <div class="section" id="outputSection" style="display: none;">
+        <h2>Generated JavaScript Data</h2>
+        <p>This is your ACTUAL plot data from the CSV and KML files:</p>
+        <button onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+        <button onclick="downloadJS()">💾 Download as plotData.js</button>
+        <div class="code-output" id="output"></div>
+    </div>
+
+    <script>
+        let processedData = '';
+        let debugLog = [];
+        
+        function log(message) {
+            debugLog.push(message);
+            console.log(message);
+        }
+        
+        async function processData() {
+            const status = document.getElementById('status');
+            const debug = document.getElementById('debug');
+            debugLog = [];
+            
+            status.innerHTML = '<div class="status">Processing your actual data files...</div>';
+            
+            try {
+                // Get files
+                const kml2022File = document.getElementById('kml2022').files[0];
+                const kml2023File = document.getElementById('kml2023').files[0];
+                const lineInterceptFile = document.getElementById('lineIntercept').files[0];
+                const plotCoverageFile = document.getElementById('plotCoverage').files[0];
+                const siteDataFile = document.getElementById('siteData').files[0];
+                const rarefactionFile = document.getElementById('rarefaction').files[0];
+                
+                if (!kml2022File || !kml2023File) {
+                    throw new Error('Please upload both KML files');
+                }
+                
+                log('Reading files...');
+                
+                // Read all files
+                const kml2022 = await readFile(kml2022File);
+                const kml2023 = await readFile(kml2023File);
+                const lineInterceptCSV = lineInterceptFile ? await readFile(lineInterceptFile) : '';
+                const plotCoverageCSV = plotCoverageFile ? await readFile(plotCoverageFile) : '';
+                const siteDataCSV = siteDataFile ? await readFile(siteDataFile) : '';
+                const rarefactionCSV = rarefactionFile ? await readFile(rarefactionFile) : '';
+                
+                // Parse KML files for plot boundaries
+                log('\n=== Parsing KML Files ===');
+                const plots2022 = parseKML(kml2022);
+                const plots2023 = parseKML(kml2023);
+                
+                log(`Found ${plots2022.length} plots in 2022 KML`);
+                log(`Found ${plots2023.length} plots in 2023 KML`);
+                
+                // Combine plots (2023 takes precedence)
+                const plotMap = new Map();
+                plots2023.forEach(plot => plotMap.set(plot.id, plot));
+                plots2022.forEach(plot => {
+                    if (!plotMap.has(plot.id)) {
+                        plotMap.set(plot.id, plot);
+                    }
+                });
+                
+                log(`Total unique plots: ${plotMap.size}`);
+                log(`Plot IDs: ${Array.from(plotMap.keys()).sort().join(', ')}`);
+                
+                // Process Line Intercept data
+                let lineInterceptData = new Map();
+                if (lineInterceptCSV) {
+                    log('\n=== Processing Line Intercept CSV ===');
+                    lineInterceptData = processLineInterceptCSV(lineInterceptCSV);
+                }
+                
+                // Process Plot Coverage data
+                let plotCoverageData = new Map();
+                if (plotCoverageCSV) {
+                    log('\n=== Processing Plot Coverage CSV ===');
+                    plotCoverageData = processPlotCoverageCSV(plotCoverageCSV);
+                }
+                
+                // Process Site Data for coordinates and environmental data
+                let siteDataMap = new Map();
+                if (siteDataCSV) {
+                    log('\n=== Processing Site Data CSV ===');
+                    siteDataMap = processSiteDataCSV(siteDataCSV);
+                }
+                
+                // Process Rarefaction data for biodiversity metrics
+                let rarefactionData = new Map();
+                if (rarefactionCSV) {
+                    log('\n=== Processing Rarefaction CSV ===');
+                    rarefactionData = processRarefactionCSV(rarefactionCSV);
+                }
+                
+                // Combine all data into final plot array
+                log('\n=== Combining All Data ===');
+                const plotDataArray = [];
+                
+                plotMap.forEach((plot, plotId) => {
+                    // Get species from both sources
+                    const lineSpecies = lineInterceptData.get(plotId) || { species: [], byYear: {} };
+                    const coverageSpecies = plotCoverageData.get(plotId) || { species: [], coverage: {} };
+                    
+                    // Combine all unique species
+                    const allSpeciesSet = new Set([...lineSpecies.species, ...coverageSpecies.species]);
+                    const allSpecies = Array.from(allSpeciesSet).sort();
+                    
+                    // Get site data if available
+                    const siteInfo = siteDataMap.get(plotId) || {};
+                    
+                    // Get rarefaction data if available
+                    const rarefactionInfo = rarefactionData.get(plotId) || {};
+                    
+                    // Use GPS coordinates from site data if available, otherwise use KML centroid
+                    const lat = siteInfo.lat || plot.lat;
+                    const lon = siteInfo.lon || plot.lon;
+                    
+                    // Simple invasive classification (you should replace with actual invasive status)
+                    const invasiveGenera = new Set([
+                        'Acacia', 'Eucalyptus', 'Pinus', 'Populus', 'Quercus', 'Robinia',
+                        'Pennisetum', 'Arundo', 'Rubus', 'Lantana', 'Ricinus',
+                        'Opuntia', 'Eichhornia', 'Salvinia', 'Myriophyllum',
+                        'Phragmites', 'Salix', 'Melia', 'Prosopis', 'Hakea'
+                    ]);
+                    
+                    const invasiveSpecies = allSpecies.filter(sp => {
+                        const genus = sp.split(' ')[0];
+                        return invasiveGenera.has(genus);
+                    });
+                    
+                    const nativeSpecies = allSpecies.filter(sp => !invasiveSpecies.includes(sp));
+                    
+                    // Calculate invasion percentage based on species count (simplified)
+                    const invasivePercent = allSpecies.length > 0 
+                        ? Math.round((invasiveSpecies.length / allSpecies.length) * 100)
+                        : 0;
+                    
+                    plotDataArray.push({
+                        id: plotId,
+                        name: `${plotId}${plot.description ? ' - ' + plot.description : ''}`,
+                        description: plot.description || '',
+                        lat: lat,
+                        lon: lon,
+                        invasiveSpecies: invasiveSpecies,
+                        nativeSpecies: nativeSpecies,
+                        invasivePercent: invasivePercent,
+                        totalSpecies: allSpecies.length,
+                        boundary: plot.boundary || [],
+                        // Additional environmental data from SiteData
+                        vegHeight: siteInfo.vegHeight || null,
+                        percentWater: siteInfo.percentWater || 0,
+                        percentBareGround: siteInfo.percentBareGround || 0,
+                        percentVegetation: siteInfo.percentVegetation || 0,
+                        // Rarefaction data
+                        rarefaction: rarefactionInfo.rarefaction || null,
+                        generalObservations: rarefactionInfo.generalObservations || '',
+                        inplotSpeciesObs: rarefactionInfo.inplotSpeciesObs || '',
+                        outplotSpeciesObs: rarefactionInfo.outplotSpeciesObs || ''
+                    });
+                });
+                
+                // Sort by plot ID
+                plotDataArray.sort((a, b) => {
+                    // Extract numbers and letters for proper sorting
+                    const aMatch = a.id.match(/([A-Z]+)(\d+)/);
+                    const bMatch = b.id.match(/([A-Z]+)(\d+)/);
+                    if (aMatch && bMatch) {
+                        if (aMatch[1] !== bMatch[1]) {
+                            return aMatch[1].localeCompare(bMatch[1]);
+                        }
+                        return parseInt(aMatch[2]) - parseInt(bMatch[2]);
+                    }
+                    return a.id.localeCompare(b.id);
+                });
+                
+                // Generate JavaScript
+                processedData = `const plotData = ${JSON.stringify(plotDataArray, null, 2)};`;
+                
+                // Display results
+                document.getElementById('output').textContent = processedData;
+                document.getElementById('outputSection').style.display = 'block';
+                
+                // Show debug info
+                document.getElementById('debug').textContent = debugLog.join('\n');
+                document.getElementById('debugSection').style.display = 'block';
+                
+                // Show statistics
+                showRealStats(plotDataArray);
+                
+                status.innerHTML = '<div class="status success">✅ Successfully processed actual data!</div>';
+                
+            } catch (error) {
+                console.error(error);
+                status.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+                document.getElementById('debug').textContent = debugLog.join('\n') + '\n\nERROR: ' + error.stack;
+                document.getElementById('debugSection').style.display = 'block';
+            }
+        }
+        
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsText(file);
+            });
+        }
+        
+        function parseKML(kmlText) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+            const placemarks = xmlDoc.getElementsByTagName("Placemark");
+            const plots = [];
+            
+            for (let i = 0; i < placemarks.length; i++) {
+                const placemark = placemarks[i];
+                const name = placemark.getElementsByTagName("name")[0]?.textContent || "";
+                const description = placemark.getElementsByTagName("description")[0]?.textContent || "";
+                
+                const coordsElement = placemark.getElementsByTagName("coordinates")[0];
+                if (coordsElement) {
+                    const coordsText = coordsElement.textContent.trim();
+                    const coordPairs = coordsText.split(/\s+/).filter(c => c.length > 0).map(coord => {
+                        const parts = coord.split(',');
+                        return [parseFloat(parts[0]), parseFloat(parts[1])];
+                    }).filter(([lon, lat]) => !isNaN(lon) && !isNaN(lat));
+                    
+                    // Calculate centroid
+                    if (coordPairs.length > 0) {
+                        const sumLat = coordPairs.reduce((sum, [lon, lat]) => sum + lat, 0);
+                        const sumLon = coordPairs.reduce((sum, [lon, lat]) => sum + lon, 0);
+                        
+                        plots.push({
+                            id: name,
+                            description: description,
+                            lat: sumLat / coordPairs.length,
+                            lon: sumLon / coordPairs.length,
+                            boundary: coordPairs
+                        });
+                    }
+                }
+            }
+            
+            return plots;
+        }
+        
+        function processLineInterceptCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            log(`Line Intercept headers: ${headers.join(', ')}`);
+            
+            // Find the actual column indices
+            const plotIndex = headers.findIndex(h => h === 'SiteCode_Plot');
+            const speciesIndex = headers.findIndex(h => h === 'AcceptedSpecies');
+            const yearIndex = headers.findIndex(h => h === 'Year');
+            
+            if (plotIndex === -1 || speciesIndex === -1) {
+                log('WARNING: Could not find SiteCode_Plot or AcceptedSpecies columns');
+                return new Map();
+            }
+            
+            const plotData = new Map();
+            let recordCount = 0;
+            let speciesCount = 0;
+            
+            for (let i = 1; i < lines.length; i++) {
+                const parts = parseCSVLine(lines[i]);
+                if (parts.length > Math.max(plotIndex, speciesIndex)) {
+                    recordCount++;
+                    const plotCode = parts[plotIndex].trim();
+                    const species = parts[speciesIndex].trim();
+                    const year = yearIndex !== -1 ? parts[yearIndex] : '';
+                    
+                    if (plotCode && species && species !== 'NA' && species !== '') {
+                        // Extract base plot ID (E1_1 -> E1)
+                        const plotId = plotCode.split('_')[0];
+                        
+                        if (!plotData.has(plotId)) {
+                            plotData.set(plotId, { 
+                                species: new Set(), 
+                                byYear: {},
+                                records: 0 
+                            });
+                        }
+                        
+                        const data = plotData.get(plotId);
+                        data.species.add(species);
+                        data.records++;
+                        speciesCount++;
+                        
+                        if (year) {
+                            if (!data.byYear[year]) {
+                                data.byYear[year] = new Set();
+                            }
+                            data.byYear[year].add(species);
+                        }
+                    }
+                }
+            }
+            
+            log(`Processed ${recordCount} Line Intercept records`);
+            log(`Found ${speciesCount} species occurrences across ${plotData.size} plots`);
+            
+            // Convert sets to arrays
+            plotData.forEach(data => {
+                data.species = Array.from(data.species).sort();
+                Object.keys(data.byYear).forEach(year => {
+                    data.byYear[year] = Array.from(data.byYear[year]).sort();
+                });
+            });
+            
+            return plotData;
+        }
+        
+        function processPlotCoverageCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            log(`Plot Coverage headers: ${headers.join(', ')}`);
+            
+            const plotIndex = headers.findIndex(h => h === 'SiteCode_Plot_Quadrant');
+            const speciesIndex = headers.findIndex(h => h === 'AcceptedSpecies');
+            const coverIndex = headers.findIndex(h => h === 'PercentCoverAlive');
+            const yearIndex = headers.findIndex(h => h === 'Year');
+            
+            if (plotIndex === -1 || speciesIndex === -1) {
+                log('WARNING: Could not find expected columns in Plot Coverage');
+                return new Map();
+            }
+            
+            const plotData = new Map();
+            let recordCount = 0;
+            
+            for (let i = 1; i < lines.length; i++) {
+                const parts = parseCSVLine(lines[i]);
+                if (parts.length > Math.max(plotIndex, speciesIndex)) {
+                    recordCount++;
+                    const plotQuadrant = parts[plotIndex].trim();
+                    const species = parts[speciesIndex].trim();
+                    const coverage = coverIndex !== -1 ? parseFloat(parts[coverIndex]) : 0;
+                    
+                    if (plotQuadrant && species && species !== 'NA' && species !== '') {
+                        // Extract base plot ID (E1_SW -> E1)
+                        const plotId = plotQuadrant.split('_')[0];
+                        
+                        if (!plotData.has(plotId)) {
+                            plotData.set(plotId, { 
+                                species: new Set(), 
+                                coverage: {},
+                                records: 0 
+                            });
+                        }
+                        
+                        const data = plotData.get(plotId);
+                        data.species.add(species);
+                        data.records++;
+                        
+                        if (!data.coverage[species]) {
+                            data.coverage[species] = [];
+                        }
+                        if (!isNaN(coverage)) {
+                            data.coverage[species].push(coverage);
+                        }
+                    }
+                }
+            }
+            
+            log(`Processed ${recordCount} Plot Coverage records`);
+            log(`Found species in ${plotData.size} plots`);
+            
+            // Convert sets to arrays
+            plotData.forEach(data => {
+                data.species = Array.from(data.species).sort();
+            });
+            
+            return plotData;
+        }
+        
+        function processSiteDataCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            log(`Site Data headers: ${headers.join(', ')}`);
+            
+            // Find all relevant columns - YOUR ACTUAL COLUMN NAMES
+            const plotIndex = headers.findIndex(h => h === 'SiteCode_Plot');
+            const latIndex = headers.findIndex(h => h === 'GPS_PlotCenter_Latitude');
+            const lonIndex = headers.findIndex(h => h === 'GPS_PlotCenter_Longitude');
+            const vegHeightIndex = headers.findIndex(h => h === 'VegHeight');
+            const percentWaterIndex = headers.findIndex(h => h === 'PercentWater');
+            const percentBareSoilIndex = headers.findIndex(h => h === 'PercentBareSoil');
+            const percentLiveVegIndex = headers.findIndex(h => h === 'PercentLiveVegetation');
+            
+            if (plotIndex === -1) {
+                log('WARNING: Could not find SiteCode_Plot column in Site Data');
+                return new Map();
+            }
+            
+            const siteData = new Map();
+            let recordCount = 0;
+            
+            for (let i = 1; i < lines.length; i++) {
+                const parts = parseCSVLine(lines[i]);
+                if (parts.length > plotIndex) {
+                    recordCount++;
+                    const plotCode = parts[plotIndex].trim();
+                    
+                    if (plotCode) {
+                        // Extract base plot ID
+                        const plotId = plotCode.split('_')[0];
+                        
+                        const data = {
+                            lat: latIndex !== -1 ? parseFloat(parts[latIndex]) : null,
+                            lon: lonIndex !== -1 ? parseFloat(parts[lonIndex]) : null,
+                            vegHeight: vegHeightIndex !== -1 ? parseInt(parts[vegHeightIndex]) : null,
+                            percentWater: percentWaterIndex !== -1 ? parseInt(parts[percentWaterIndex]) : 0,
+                            percentBareGround: percentBareSoilIndex !== -1 ? parseInt(parts[percentBareSoilIndex]) : 0,
+                            percentVegetation: percentLiveVegIndex !== -1 ? parseInt(parts[percentLiveVegIndex]) : 0
+                        };
+                        
+                        // Only update if we have valid coordinates
+                        if (data.lat && data.lon && !isNaN(data.lat) && !isNaN(data.lon)) {
+                            if (!siteData.has(plotId) || 
+                                (siteData.get(plotId).lat === null && data.lat !== null)) {
+                                siteData.set(plotId, data);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            log(`Processed ${recordCount} Site Data records`);
+            log(`Found GPS coordinates for ${siteData.size} plots`);
+            
+            return siteData;
+        }
+        
+        function processRarefactionCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            log(`Rarefaction headers: ${headers.join(', ')}`);
+            
+            // Find column indices based on the actual column names
+            const siteIndex = headers.findIndex(h => h === 'Site');
+            const rarefactionIndex = headers.findIndex(h => h === 'Rarefaction');
+            const generalObsIndex = headers.findIndex(h => h === 'General_Plot_Observations');
+            const inplotSpeciesIndex = headers.findIndex(h => h === 'Inplot_Species_Observation');
+            const outplotSpeciesIndex = headers.findIndex(h => h === 'Outplot_Species_Observations');
+            const commentsIndex = headers.findIndex(h => h === 'Comments');
+            const yearIndex = headers.findIndex(h => h === 'Year');
+            
+            if (siteIndex === -1) {
+                log('WARNING: Could not find Site column in Rarefaction data');
+                return new Map();
+            }
+            
+            const rarefactionData = new Map();
+            let recordCount = 0;
+            
+            for (let i = 1; i < lines.length; i++) {
+                const parts = parseCSVLine(lines[i]);
+                if (parts.length > siteIndex) {
+                    recordCount++;
+                    const site = parts[siteIndex].trim();
+                    
+                    if (site) {
+                        const data = {
+                            rarefaction: rarefactionIndex !== -1 ? parseInt(parts[rarefactionIndex]) : null,
+                            generalObservations: generalObsIndex !== -1 ? parts[generalObsIndex].trim() : '',
+                            inplotSpeciesObs: inplotSpeciesIndex !== -1 ? parts[inplotSpeciesIndex].trim() : '',
+                            outplotSpeciesObs: outplotSpeciesIndex !== -1 ? parts[outplotSpeciesIndex].trim() : '',
+                            comments: commentsIndex !== -1 ? parts[commentsIndex].trim() : '',
+                            year: yearIndex !== -1 ? parts[yearIndex] : null
+                        };
+                        
+                        // Store the most recent year's data for each plot
+                        if (!rarefactionData.has(site) || 
+                            (data.year && rarefactionData.get(site).year && data.year > rarefactionData.get(site).year)) {
+                            rarefactionData.set(site, data);
+                        }
+                    }
+                }
+            }
+            
+            log(`Processed ${recordCount} Rarefaction records`);
+            log(`Found rarefaction data for ${rarefactionData.size} plots`);
+            
+            // Log some sample data
+            if (rarefactionData.size > 0) {
+                const firstPlot = Array.from(rarefactionData.entries())[0];
+                log(`Sample rarefaction data for ${firstPlot[0]}: ${firstPlot[1].rarefaction} species`);
+            }
+            
+            return rarefactionData;
+        }
+        
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            
+            return result;
+        }
+        
+        function showRealStats(plotData) {
+            // Calculate real statistics
+            const totalSpecies = new Set();
+            let totalInvasive = 0;
+            let totalNative = 0;
+            let plotsWithData = 0;
+            
+            plotData.forEach(plot => {
+                if (plot.totalSpecies > 0) {
+                    plotsWithData++;
+                }
+                plot.invasiveSpecies.forEach(sp => totalSpecies.add(sp));
+                plot.nativeSpecies.forEach(sp => totalSpecies.add(sp));
+                totalInvasive += plot.invasiveSpecies.length;
+                totalNative += plot.nativeSpecies.length;
+            });
+            
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${plotData.length}</div>
+                    <div class="stat-label">Total Plots</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${plotsWithData}</div>
+                    <div class="stat-label">Plots with Species Data</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${totalSpecies.size}</div>
+                    <div class="stat-label">Total Unique Species</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${plotsWithData > 0 ? Math.round(totalInvasive / plotsWithData) : 0}</div>
+                    <div class="stat-label">Avg Invasive/Plot</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${plotsWithData > 0 ? Math.round(totalNative / plotsWithData) : 0}</div>
+                    <div class="stat-label">Avg Native/Plot</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${plotsWithData > 0 ? Math.round((totalInvasive / (totalInvasive + totalNative)) * 100) : 0}%</div>
+                    <div class="stat-label">Overall Invasion %</div>
+                </div>
+            `;
+            
+            document.getElementById('stats').innerHTML = statsHTML;
+            
+            // Create plot summary table
+            let tableHTML = '<h3>Plot Summary</h3><table><tr><th>Plot ID</th><th>Total Species</th><th>Invasive</th><th>Native</th><th>Invasion %</th><th>Rarefaction</th><th>Water %</th></tr>';
+            plotData.forEach(plot => {
+                tableHTML += `<tr>
+                    <td>${plot.id}</td>
+                    <td>${plot.totalSpecies}</td>
+                    <td>${plot.invasiveSpecies.length}</td>
+                    <td>${plot.nativeSpecies.length}</td>
+                    <td>${plot.invasivePercent}%</td>
+                    <td>${plot.rarefaction || '-'}</td>
+                    <td>${plot.percentWater || 0}%</td>
+                </tr>`;
+            });
+            tableHTML += '</table>';
+            
+            document.getElementById('plotTable').innerHTML = tableHTML;
+            document.getElementById('statsSection').style.display = 'block';
+        }
+        
+        function copyToClipboard() {
+            navigator.clipboard.writeText(processedData).then(() => {
+                alert('Data copied to clipboard!');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = processedData;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Data copied to clipboard!');
+            });
+        }
+        
+        function downloadJS() {
+            const blob = new Blob([processedData], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'plotData.js';
+            a.click();
+        }
+        
+        function clearAll() {
+            document.getElementById('kml2022').value = '';
+            document.getElementById('kml2023').value = '';
+            document.getElementById('lineIntercept').value = '';
+            document.getElementById('plotCoverage').value = '';
+            document.getElementById('siteData').value = '';
+            document.getElementById('rarefaction').value = '';
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('debugSection').style.display = 'none';
+            document.getElementById('statsSection').style.display = 'none';
+            document.getElementById('outputSection').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
