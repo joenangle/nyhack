@@ -1,9 +1,1266 @@
 <!DOCTYPE html>
-   <html>
-   <head>
-       <title>NYHack</title>
-   </head>
-   <body>
-       <h1>Hello World</h1>
-   </body>
-   </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive map visualizing native and invasive species distribution across Greater Cape Floristic Region monitoring plots">
+    <meta name="keywords" content="biodiversity, species distribution, invasive species, Cape Floristic Region, BioSCape, GBIF">
+    <meta name="author" content="BioSCape Project">
+    <meta property="og:title" content="BioSCape Species Distribution Map">
+    <meta property="og:description" content="Interactive visualization of biodiversity data from the Greater Cape Floristic Region">
+    <meta property="og:type" content="website">
+    <title>BioSCape Species Distribution Map</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        .header-subtitle {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .control-panel {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider.invasive {
+            background-color: #ff6b6b;
+        }
+        
+        input:checked + .toggle-slider.native {
+            background-color: #51cf66;
+        }
+        
+        input:checked + .toggle-slider.coverage {
+            background-color: #667eea;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        .toggle-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .species-badge {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .invasive-badge {
+            background: #ffe0e0;
+            color: #d63031;
+        }
+        
+        .native-badge {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .map-container {
+            flex: 1;
+            position: relative;
+            background: #e0e0e0;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #f0f0f0;
+        }
+        
+        .map-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        
+        .map-placeholder h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .map-placeholder p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .plot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .mini-plot {
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .mini-plot:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .mini-plot.invaded {
+            background: #ffe0e0;
+        }
+        
+        .mini-plot.mixed {
+            background: #fff3cd;
+        }
+        
+        .mini-plot.native {
+            background: #d4edda;
+        }
+        
+        .plot-id {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .plot-status {
+            font-size: 0.7em;
+            color: #666;
+        }
+        
+        .side-panel {
+            width: 350px;
+            background: white;
+            border-left: 1px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .plot-info {
+            margin-bottom: 20px;
+        }
+        
+        .plot-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .info-label {
+            color: #666;
+        }
+        
+        .info-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .species-list {
+            margin-top: 15px;
+        }
+        
+        .species-category {
+            margin-bottom: 15px;
+        }
+        
+        .species-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .species-item {
+            padding: 5px 10px;
+            margin: 3px 0;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        
+        .invasive-species {
+            background: #ffe0e0;
+            color: #d63031;
+            border-left: 3px solid #ff6b6b;
+        }
+        
+        .native-species {
+            background: #d4edda;
+            color: #155724;
+            border-left: 3px solid #51cf66;
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .species-highlight {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .species-indicator {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .side-panel {
+                width: 100%;
+                height: 300px;
+                order: -1;
+            }
+
+            .control-panel {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .toggle-group {
+                justify-content: space-between;
+            }
+
+            .header h1 {
+                font-size: 1.2em;
+            }
+
+            .header-subtitle {
+                font-size: 0.8em;
+            }
+
+            .map-legend {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .plot-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+        }
+
+        /* Accessibility Improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .toggle-switch input:focus + .toggle-slider {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .mini-plot:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        button.mini-plot {
+            background: white;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button.mini-plot:hover,
+        button.mini-plot:focus {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <h1>🗺️ BioSCape Species Distribution Map</h1>
+        <div class="header-subtitle">Interactive visualization of native and invasive species across Greater Cape Floristic Region monitoring plots</div>
+    </header>
+
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+    
+    <nav class="control-panel" role="navigation" aria-label="Map controls">
+        <div class="toggle-group">
+            <label class="toggle-label">
+                <span>Show Invasive Species</span>
+                <span class="species-badge invasive-badge" id="invasiveCount">23</span>
+            </label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="invasiveToggle" checked aria-describedby="invasiveCount">
+                <span class="toggle-slider invasive" aria-hidden="true"></span>
+            </label>
+        </div>
+        
+        <div class="toggle-group">
+            <label class="toggle-label">
+                <span>Show Native Species</span>
+                <span class="species-badge native-badge" id="nativeCount">42</span>
+            </label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="nativeToggle" checked aria-describedby="nativeCount">
+                <span class="toggle-slider native" aria-hidden="true"></span>
+            </label>
+        </div>
+        
+        <div class="toggle-group">
+            <label class="toggle-label">
+                <span>Show Plot Boundaries</span>
+            </label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="boundaryToggle" aria-label="Toggle plot boundaries">
+                <span class="toggle-slider coverage" aria-hidden="true"></span>
+            </label>
+        </div>
+        
+        <div class="toggle-group">
+            <label class="toggle-label">
+                <span>Show Coverage Heat Map</span>
+            </label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="coverageToggle" aria-label="Toggle coverage heat map">
+                <span class="toggle-slider coverage" aria-hidden="true"></span>
+            </label>
+        </div>
+        
+        <div class="toggle-group" style="flex: 1; min-width: 250px;">
+            <label class="toggle-label">
+                <span>Highlight Species:</span>
+            </label>
+            <select id="speciesSelector" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; flex: 1;" aria-label="Select species to highlight">
+                <option value="">All species</option>
+                <optgroup label="Invasive Species" id="invasiveOptions"></optgroup>
+                <optgroup label="Native Species" id="nativeOptions"></optgroup>
+            </select>
+        </div>
+    </nav>
+    
+    <main class="main-content" id="main-content">
+        <div class="map-container" role="application" aria-label="Interactive species distribution map">
+            <div id="map" role="img" aria-label="Species distribution map showing plot locations"></div>
+            
+            <!-- Fallback content when map tiles can't load -->
+            <div class="map-placeholder" id="mapPlaceholder" style="display: none;" role="region" aria-label="Plot grid fallback">
+                <h3>📍 Plot Locations</h3>
+                <p>The interactive map requires external map tiles that may not load in preview mode. Save and open this HTML file locally for the full map experience with OpenStreetMap tiles.</p>
+                <p><strong>Click any plot below to view species details:</strong></p>
+
+                <div class="plot-grid" id="plotGrid" role="grid" aria-label="Grid of monitoring plots"></div>
+            </div>
+            
+            <div class="map-legend" role="region" aria-label="Map legend">
+                <div class="legend-title">Plot Status</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #51cf66;"></div>
+                    <span>Native dominated (0-10% invasive)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffd93d;"></div>
+                    <span>Mixed (10-30% invasive)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff6b6b;"></div>
+                    <span>Invaded (>30% invasive)</span>
+                </div>
+            </div>
+        </div>
+        
+        <aside class="side-panel" role="complementary" aria-label="Plot details panel">
+            <div class="plot-info">
+                <h3 id="plotName">Select a plot</h3>
+                <div id="plotDetails" role="region" aria-live="polite" aria-label="Plot information">
+                    <p style="color: #666; padding: 20px 0;">Click on any plot marker on the map to view detailed species information</p>
+                </div>
+            </div>
+        </aside>
+    </main>
+    
+    <script>
+        // Plot data with coordinates and species information
+        const plotData = [
+            {
+                id: 'E1',
+                name: 'E1 - Eerste River',
+                description: 'Disturbed floodplain',
+                lat: -33.9739,
+                lon: 18.7856,
+                invasiveSpecies: ['Acacia mearnsii', 'Pennisetum clandestinum'],
+                nativeSpecies: ['Cliffortia strobilifera', 'Elegia capensis', 'Restio triticeus', 'Leucadendron salignum'],
+                invasivePercent: 33,
+                boundary: [
+                    [18.7856911,-33.9739625],[18.7857068,-33.9739657],[18.7857333,-33.9739652],[18.7857421,-33.9739575],
+                    [18.7857366,-33.9739445],[18.7857225,-33.973934],[18.7857135,-33.9739093],[18.7857062,-33.9739026],
+                    [18.7856921,-33.9738989],[18.7856728,-33.9738777],[18.7856581,-33.9738723],[18.7856437,-33.9738805],
+                    [18.7856315,-33.9738821],[18.7855948,-33.9738756],[18.7855636,-33.9738778],[18.7855488,-33.9738728],
+                    [18.7855399,-33.973866],[18.785515,-33.9738697],[18.785501,-33.9738686],[18.7854898,-33.9738718],
+                    [18.7854746,-33.9738707],[18.7854637,-33.9738749],[18.7854005,-33.9738755],[18.7853907,-33.9738715],
+                    [18.7853751,-33.973872],[18.7853617,-33.9738759],[18.7853588,-33.973885],[18.7853746,-33.973902],
+                    [18.7853865,-33.9739094],[18.7853918,-33.9739218],[18.7853814,-33.9739303],[18.7853846,-33.9739412],
+                    [18.7854071,-33.9739559],[18.7854123,-33.9739678],[18.7854139,-33.9739897],[18.785425,-33.9739942],
+                    [18.7856234,-33.9740146],[18.785641,-33.9740108],[18.7856484,-33.9740034],[18.7856322,-33.9739994],
+                    [18.7856762,-33.9739983],[18.7856862,-33.973994],[18.7856931,-33.9739851],[18.7856912,-33.9739751],
+                    [18.7856973,-33.9739666],[18.7856911,-33.9739625]
+                ]
+            },
+            {
+                id: 'E2',
+                name: 'E2 - Glenelly',
+                description: 'Glenelly area',
+                lat: -33.9201,
+                lon: 18.8795,
+                invasiveSpecies: [],
+                nativeSpecies: ['Protea repens', 'Leucospermum conocarpodendron', 'Erica mammosa', 'Restio festuciformis', 'Phylica pubescens'],
+                invasivePercent: 0,
+                boundary: [
+                    [18.8794252,-33.9200919],[18.8794154,-33.9200968],[18.8794259,-33.9200996],[18.8794158,-33.9201054],
+                    [18.8794149,-33.9201157],[18.8794102,-33.9201246],[18.8794081,-33.9201432],[18.8794024,-33.9201636],
+                    [18.8794029,-33.9201835],[18.8795155,-33.9201554],[18.8795346,-33.9201583],[18.8796029,-33.9201356],
+                    [18.8796243,-33.9201232],[18.8796336,-33.9201038],[18.8796492,-33.9201033],[18.8797509,-33.9200902],
+                    [18.8798209,-33.9200652],[18.8798385,-33.9200545],[18.8798593,-33.9200319],[18.879934,-33.9199905],
+                    [18.8799461,-33.919956],[18.8799473,-33.9199225],[18.8799253,-33.9199182],[18.8799399,-33.919914],
+                    [18.879929,-33.9199138],[18.8799256,-33.9199039],[18.8799344,-33.9198928],[18.8799771,-33.9198608],
+                    [18.8799702,-33.9198532],[18.8799927,-33.9198528],[18.8799497,-33.9198332],[18.8798765,-33.9199031],
+                    [18.8798659,-33.9199092],[18.8798519,-33.9199127],[18.8798156,-33.9199094],[18.8797606,-33.9199296],
+                    [18.8797013,-33.9199991],[18.8796909,-33.9200038],[18.8796613,-33.92001],[18.8796479,-33.9200099],
+                    [18.879636,-33.9200062],[18.8796273,-33.9199981],[18.8795994,-33.919954],[18.8795756,-33.9199394],
+                    [18.879539,-33.9199271],[18.8795244,-33.9199175],[18.8795126,-33.9199165],[18.8795006,-33.9199183],
+                    [18.8794872,-33.9199234],[18.8794641,-33.9199384],[18.8794318,-33.9199817],[18.8794226,-33.9200299],
+                    [18.8794142,-33.920046],[18.8794027,-33.9200477],[18.879397,-33.9200385],[18.8793917,-33.920053],
+                    [18.8793924,-33.9200646],[18.8794032,-33.9200685],[18.8794252,-33.9200919]
+                ]
+            },
+            {
+                id: 'E3',
+                name: 'E3 - Oak Grove',
+                description: 'Oak and indigenous wild olive and camphor / Quercus robur grove',
+                lat: -33.9635,
+                lon: 18.9203,
+                invasiveSpecies: ['Quercus robur'],
+                nativeSpecies: ['Olea europaea subsp. africana', 'Podocarpus latifolius'],
+                invasivePercent: 33,
+                boundary: [
+                    [18.9203914,-33.9636276],[18.9203792,-33.9636303],[18.9203149,-33.9635978],[18.9202874,-33.9635755],
+                    [18.9202685,-33.9635512],[18.9202329,-33.9635255],[18.9201956,-33.9634805],[18.9201921,-33.9634653],
+                    [18.9201835,-33.9634577],[18.9201936,-33.9634535],[18.9202088,-33.963452],[18.9202086,-33.9634404],
+                    [18.9202112,-33.9634295],[18.9202223,-33.9634223],[18.9202365,-33.9634286],[18.9202545,-33.9634397],
+                    [18.9202672,-33.9634384],[18.9202764,-33.9634323],[18.9202874,-33.9634303],[18.9202953,-33.9634392],
+                    [18.9202973,-33.9634506],[18.9203078,-33.9634551],[18.9203231,-33.9634731],[18.9203341,-33.9634753],
+                    [18.9203385,-33.9634841],[18.9203541,-33.9634815],[18.9203616,-33.9634717],[18.9203862,-33.9634589],
+                    [18.9203941,-33.9634512],[18.9204197,-33.9634364],[18.9204318,-33.9634331],[18.9204423,-33.9634364],
+                    [18.9204524,-33.9634443],[18.920454,-33.9634556],[18.9204687,-33.9634597],[18.9204585,-33.9634705],
+                    [18.9204607,-33.9634851],[18.9204713,-33.9635023],[18.9204843,-33.963536],[18.9205089,-33.9635615],
+                    [18.920508,-33.9635707],[18.9205043,-33.9635792],[18.9204865,-33.9635911],[18.9204802,-33.9636025],
+                    [18.920425,-33.9636463],[18.9204153,-33.9636415],[18.9204035,-33.9636427],[18.9203914,-33.9636276]
+                ]
+            },
+            {
+                id: 'E4',
+                name: 'E4 - Headwaters',
+                description: 'Headwaters of Eerste',
+                lat: -33.9854,
+                lon: 18.9555,
+                invasiveSpecies: ['Pinus pinaster'],
+                nativeSpecies: ['Protea nitida', 'Leucadendron rubrum', 'Restio purpurascens', 'Erica plukenetii'],
+                invasivePercent: 20,
+                boundary: [] // Too many coordinates, simplified for demo
+            },
+            {
+                id: 'B2',
+                name: 'B2 - New Site',
+                description: 'Berg River monitoring',
+                lat: -33.9674,
+                lon: 19.0804,
+                invasiveSpecies: ['Eucalyptus camaldulensis'],
+                nativeSpecies: ['Morella serrata', 'Searsia angustifolia', 'Kiggelaria africana'],
+                invasivePercent: 25,
+                boundary: [
+                    [19.08038568,-33.96742999],[19.08033941,-33.96741664],[19.08029549,-33.9674197],[19.0802063,-33.9674197],
+                    [19.0801996,-33.96747559],[19.08018921,-33.9675134],[19.08018921,-33.96751952],[19.0802665,-33.967505],
+                    [19.08021805,-33.96753525],[19.08020235,-33.9675571],[19.08020585,-33.96758585],[19.0802183,-33.9676005],
+                    [19.08023065,-33.96760215],[19.0802478,-33.96759275],[19.08026440,-33.9675822],[19.0802823,-33.9675817],
+                    [19.0803002,-33.9675795],[19.0803134,-33.96757695],[19.0803340,-33.9675815],[19.08035235,-33.9675823],
+                    [19.08035900,-33.96757325],[19.08036695,-33.96756775],[19.08038150,-33.96757035],[19.08041384,-33.96756929],
+                    [19.08048056,-33.9675565],[19.08045240,-33.96754149],[19.08041116,-33.96754204],[19.08046279,-33.96752425],
+                    [19.08044301,-33.96748073],[19.0803722,-33.9674759],[19.08038318,-33.96747295],[19.08037679,-33.96748101],
+                    [19.08038568,-33.96742999]
+                ]
+            },
+            {
+                id: 'B3',
+                name: 'B3 - Steel Bridge',
+                description: 'Under steel bridge, river runs through',
+                lat: -33.9550,
+                lon: 19.0733,
+                invasiveSpecies: ['Arundo donax', 'Rubus cuneifolius'],
+                nativeSpecies: ['Prionium serratum', 'Brachylaena neriifolia'],
+                invasivePercent: 50,
+                boundary: [
+                    [19.0735045,-33.9551694],[19.073502,-33.9551812],[19.0735151,-33.9551829],[19.0735263,-33.9551818],
+                    [19.07354,-33.9551966],[19.0735329,-33.9552042],[19.0735232,-33.95521],[19.0735124,-33.9552127],
+                    [19.0734893,-33.9552102],[19.0734751,-33.9552154],[19.0734641,-33.9552157],[19.0734284,-33.9552323],
+                    [19.0734174,-33.9552331],[19.0734223,-33.9552428],[19.0734306,-33.9552369],[19.0734375,-33.9552282],
+                    [19.0734236,-33.9552244],[19.0734211,-33.9552146],[19.0734124,-33.9552073],[19.0733836,-33.9551649],
+                    [19.0733721,-33.9551607],[19.0733608,-33.9551609],[19.0733523,-33.9551551],[19.0733301,-33.9551554],
+                    [19.0733061,-33.9551493],[19.0732264,-33.9551014],[19.0732209,-33.9550923],[19.0732083,-33.9550255],
+                    [19.0732108,-33.9550147],[19.0732207,-33.9550064],[19.0732266,-33.9549961],[19.073223,-33.9549357],
+                    [19.0732434,-33.9548871],[19.0732422,-33.9548231],[19.0732366,-33.9547957],[19.0732372,-33.9547854],
+                    [19.07326,-33.9547903],[19.0732714,-33.9547902],[19.0732945,-33.9547948],[19.0733036,-33.9548012],
+                    [19.0733413,-33.9547949],[19.0733545,-33.9547983],[19.0733571,-33.9548073],[19.0733685,-33.95481],
+                    [19.0733796,-33.9548079],[19.0734083,-33.954788],[19.0734318,-33.9547845],[19.0734453,-33.9547882],
+                    [19.0734666,-33.9548012],[19.0734779,-33.954805],[19.073481,-33.9551501],[19.0734836,-33.9551601],
+                    [19.0735045,-33.9551694]
+                ]
+            },
+            {
+                id: 'B6',
+                name: 'B6 - Berg Dam',
+                description: 'Berg dam outflow',
+                lat: -33.8998,
+                lon: 19.0530,
+                invasiveSpecies: ['Acacia saligna'],
+                nativeSpecies: ['Diospyros glabra', 'Rhus lucida', 'Pelargonium cucullatum'],
+                invasivePercent: 25
+            },
+            {
+                id: 'B7',
+                name: 'B7 - Floodplain',
+                description: 'Grass patch in silt floodplain',
+                lat: -33.8761,
+                lon: 19.0310,
+                invasiveSpecies: ['Cynodon dactylon'],
+                nativeSpecies: ['Imperata cylindrica', 'Stenotaphrum secundatum'],
+                invasivePercent: 33
+            },
+            {
+                id: 'B8',
+                name: 'B8 - Pennisetum',
+                description: 'Pennisetum invasion site',
+                lat: -33.7742,
+                lon: 18.9737,
+                invasiveSpecies: ['Pennisetum clandestinum', 'Pennisetum setaceum'],
+                nativeSpecies: ['Themeda triandra', 'Cynodon dactylon'],
+                invasivePercent: 50
+            },
+            {
+                id: 'B10',
+                name: 'B10 - Berg Access',
+                description: 'Berg public access - aquatic invasives',
+                lat: -33.7503,
+                lon: 18.9686,
+                invasiveSpecies: ['Eichhornia crassipes', 'Salvinia molesta', 'Myriophyllum aquaticum'],
+                nativeSpecies: ['Zantedeschia aethiopica', 'Cyperus textilis'],
+                invasivePercent: 60
+            },
+            {
+                id: 'B15',
+                name: 'B15 - Doring River',
+                description: 'Phragmites australis',
+                lat: -33.5420,
+                lon: 18.9271,
+                invasiveSpecies: ['Phragmites australis'],
+                nativeSpecies: ['Juncus kraussii', 'Typha capensis', 'Bolboschoenus maritimus'],
+                invasivePercent: 25
+            },
+            {
+                id: 'B20',
+                name: 'B20 - Berg River',
+                description: 'Berg River site',
+                lat: -33.2019,
+                lon: 18.9313,
+                invasiveSpecies: ['Arundo donax'],
+                nativeSpecies: ['Prionium serratum', 'Morella serrata', 'Searsia angustifolia'],
+                invasivePercent: 25
+            }
+        ];
+        
+        let map;
+        let markers = {};
+        let boundaryLayers = {};
+        let heatmapLayers = [];
+        let speciesHighlightLayers = [];
+        let selectedPlot = null;
+        let mapLoaded = false;
+        let allSpecies = { invasive: new Set(), native: new Set() };
+        
+        // Try to initialize map
+        try {
+            map = L.map('map').setView([-33.75, 18.95], 9);
+            
+            // Add tile layer with error handling
+            const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            });
+            
+            tileLayer.on('tileerror', function(error, tile) {
+                console.log('Tile loading error - falling back to plot grid view');
+                if (!mapLoaded) {
+                    showPlaceholder();
+                }
+            });
+            
+            tileLayer.addTo(map);
+            
+            // Check if tiles are loading
+            setTimeout(() => {
+                if (!mapLoaded && map) {
+                    map.on('load', () => {
+                        mapLoaded = true;
+                    });
+                    // Give it a bit more time, then show placeholder if still not loaded
+                    setTimeout(() => {
+                        if (!mapLoaded) {
+                            showPlaceholder();
+                        }
+                    }, 2000);
+                }
+            }, 100);
+            
+            createMarkers();
+            
+        } catch (error) {
+            console.log('Map initialization failed - showing plot grid');
+            showPlaceholder();
+        }
+        
+        // Function to show placeholder when map tiles don't load
+        function showPlaceholder() {
+            document.getElementById('mapPlaceholder').style.display = 'block';
+            const plotGrid = document.getElementById('plotGrid');
+            
+            plotData.forEach(plot => {
+                let statusClass = 'native';
+                if (plot.invasivePercent > 30) statusClass = 'invaded';
+                else if (plot.invasivePercent > 10) statusClass = 'mixed';
+                
+                const plotButton = document.createElement('button');
+                plotButton.className = `mini-plot ${statusClass}`;
+                plotButton.innerHTML = `
+                    <div class="plot-id">${plot.id}</div>
+                    <div class="plot-status">${plot.invasivePercent}% inv.</div>
+                `;
+                plotButton.setAttribute('aria-label', `Select plot ${plot.id}, ${plot.invasivePercent}% invasive`);
+                plotButton.onclick = () => selectPlot(plot);
+                plotGrid.appendChild(plotButton);
+            });
+        }
+        
+        // Create markers for each plot
+        function createMarkers() {
+            if (!map) return;
+            
+            plotData.forEach(plot => {
+                // Determine marker color based on invasion level
+                let markerColor;
+                if (plot.invasivePercent === 0) {
+                    markerColor = '#51cf66';
+                } else if (plot.invasivePercent <= 10) {
+                    markerColor = '#51cf66';
+                } else if (plot.invasivePercent <= 30) {
+                    markerColor = '#ffd93d';
+                } else {
+                    markerColor = '#ff6b6b';
+                }
+                
+                // Create custom icon
+                const icon = L.divIcon({
+                    html: `<div style="background: ${markerColor}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 10px;">${plot.id}</div>`,
+                    iconSize: [30, 30],
+                    className: 'custom-marker'
+                });
+                
+                // Create marker
+                const marker = L.marker([plot.lat, plot.lon], { icon: icon })
+                    .addTo(map)
+                    .on('click', () => selectPlot(plot));
+                
+                // Add popup
+                marker.bindPopup(`
+                    <strong>${plot.name}</strong><br>
+                    ${plot.description}<br>
+                    <span style="color: #ff6b6b;">Invasive: ${plot.invasiveSpecies.length} species</span><br>
+                    <span style="color: #51cf66;">Native: ${plot.nativeSpecies.length} species</span>
+                `);
+                
+                markers[plot.id] = marker;
+                
+                // Create plot boundary polygon if coordinates exist
+                if (plot.boundary && plot.boundary.length > 0) {
+                    // Convert coordinates to Leaflet format [lat, lon]
+                    const latLngs = plot.boundary.map(coord => [coord[1], coord[0]]);
+                    
+                    // Determine polygon color based on invasion level
+                    let polygonColor = markerColor;
+                    
+                    // Create polygon
+                    const polygon = L.polygon(latLngs, {
+                        color: polygonColor,
+                        weight: 2,
+                        opacity: 0.8,
+                        fillColor: polygonColor,
+                        fillOpacity: 0.2
+                    }).bindPopup(`<strong>${plot.name}</strong><br>Plot area boundary`);
+                    
+                    // Store polygon in boundary layers
+                    boundaryLayers[plot.id] = polygon;
+                }
+            });
+        }
+        
+        // Populate species selector
+        function populateSpeciesSelector() {
+            // Collect all unique species
+            plotData.forEach(plot => {
+                plot.invasiveSpecies.forEach(sp => allSpecies.invasive.add(sp));
+                plot.nativeSpecies.forEach(sp => allSpecies.native.add(sp));
+            });
+            
+            const invasiveOptions = document.getElementById('invasiveOptions');
+            const nativeOptions = document.getElementById('nativeOptions');
+            
+            // Add invasive species options
+            Array.from(allSpecies.invasive).sort().forEach(species => {
+                const option = document.createElement('option');
+                option.value = species;
+                option.textContent = species;
+                option.dataset.type = 'invasive';
+                invasiveOptions.appendChild(option);
+            });
+            
+            // Add native species options
+            Array.from(allSpecies.native).sort().forEach(species => {
+                const option = document.createElement('option');
+                option.value = species;
+                option.textContent = species;
+                option.dataset.type = 'native';
+                nativeOptions.appendChild(option);
+            });
+        }
+        
+        // Highlight species distribution
+        function highlightSpecies(speciesName) {
+            // Clear previous highlights
+            clearSpeciesHighlights();
+            
+            if (!speciesName || !map) return;
+            
+            // Find which type of species it is
+            let isInvasive = allSpecies.invasive.has(speciesName);
+            let speciesColor = isInvasive ? '#ff6b6b' : '#51cf66';
+            
+            // Find all plots with this species
+            let plotsWithSpecies = [];
+            plotData.forEach(plot => {
+                let hasSpecies = false;
+                let countInPlot = 0;
+                
+                if (plot.invasiveSpecies.includes(speciesName)) {
+                    hasSpecies = true;
+                    countInPlot = 1; // Could be enhanced with actual abundance data
+                }
+                if (plot.nativeSpecies.includes(speciesName)) {
+                    hasSpecies = true;
+                    countInPlot = 1;
+                }
+                
+                if (hasSpecies) {
+                    plotsWithSpecies.push(plot);
+                    
+                    // Create highlight circle around plot
+                    const highlightCircle = L.circle([plot.lat, plot.lon], {
+                        radius: 1000,
+                        color: speciesColor,
+                        fillColor: speciesColor,
+                        fillOpacity: 0.5,
+                        weight: 3
+                    }).addTo(map);
+                    
+                    highlightCircle.bindPopup(`
+                        <strong>${speciesName}</strong><br>
+                        ${isInvasive ? '⚠️ Invasive' : '✓ Native'}<br>
+                        Present at: ${plot.name}
+                    `);
+                    
+                    speciesHighlightLayers.push(highlightCircle);
+                    
+                    // Update marker to show species presence
+                    if (markers[plot.id]) {
+                        const marker = markers[plot.id];
+                        const markerElement = marker.getElement();
+                        if (markerElement) {
+                            markerElement.classList.add('species-highlight');
+                        }
+                    }
+                    
+                    // Highlight boundary if visible
+                    if (boundaryLayers[plot.id] && map.hasLayer(boundaryLayers[plot.id])) {
+                        boundaryLayers[plot.id].setStyle({
+                            weight: 4,
+                            color: speciesColor,
+                            fillOpacity: 0.4
+                        });
+                    }
+                }
+            });
+            
+            // Update status message
+            const statusMessage = `${speciesName} found in ${plotsWithSpecies.length} plots`;
+            console.log(statusMessage);
+            
+            // Optionally zoom to show all plots with this species
+            if (plotsWithSpecies.length > 0) {
+                const bounds = L.latLngBounds(plotsWithSpecies.map(p => [p.lat, p.lon]));
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+        
+        // Clear species highlights
+        function clearSpeciesHighlights() {
+            // Remove highlight circles
+            speciesHighlightLayers.forEach(layer => {
+                map.removeLayer(layer);
+            });
+            speciesHighlightLayers = [];
+            
+            // Reset marker styles
+            Object.values(markers).forEach(marker => {
+                const markerElement = marker.getElement();
+                if (markerElement) {
+                    markerElement.classList.remove('species-highlight');
+                }
+            });
+            
+            // Reset boundary styles
+            Object.keys(boundaryLayers).forEach(plotId => {
+                const plot = plotData.find(p => p.id === plotId);
+                if (plot && boundaryLayers[plotId]) {
+                    let polygonColor = '#51cf66';
+                    if (plot.invasivePercent > 30) polygonColor = '#ff6b6b';
+                    else if (plot.invasivePercent > 10) polygonColor = '#ffd93d';
+                    
+                    boundaryLayers[plotId].setStyle({
+                        weight: 2,
+                        color: polygonColor,
+                        fillOpacity: 0.2
+                    });
+                }
+            });
+        }
+        function selectPlot(plot) {
+            selectedPlot = plot;
+            
+            document.getElementById('plotName').textContent = plot.name;
+            
+            let detailsHTML = `
+                <div class="info-row">
+                    <span class="info-label">Description:</span>
+                    <span class="info-value">${plot.description}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Coordinates:</span>
+                    <span class="info-value">${plot.lat.toFixed(4)}, ${plot.lon.toFixed(4)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Invasion Level:</span>
+                    <span class="info-value" style="color: ${plot.invasivePercent > 30 ? '#ff6b6b' : plot.invasivePercent > 10 ? '#ffd93d' : '#51cf66'}">
+                        ${plot.invasivePercent}% invasive
+                    </span>
+                </div>
+                
+                <div class="species-list">
+            `;
+            
+            // Add invasive species if toggle is on
+            if (document.getElementById('invasiveToggle').checked && plot.invasiveSpecies.length > 0) {
+                detailsHTML += `
+                    <div class="species-category">
+                        <div class="species-header">
+                            <span style="color: #ff6b6b;">⚠️ Invasive Species</span>
+                            <span class="species-badge invasive-badge">${plot.invasiveSpecies.length}</span>
+                        </div>
+                        ${plot.invasiveSpecies.map(species => 
+                            `<div class="species-item invasive-species">${species}</div>`
+                        ).join('')}
+                    </div>
+                `;
+            }
+            
+            // Add native species if toggle is on
+            if (document.getElementById('nativeToggle').checked && plot.nativeSpecies.length > 0) {
+                detailsHTML += `
+                    <div class="species-category">
+                        <div class="species-header">
+                            <span style="color: #51cf66;">✓ Native Species</span>
+                            <span class="species-badge native-badge">${plot.nativeSpecies.length}</span>
+                        </div>
+                        ${plot.nativeSpecies.map(species => 
+                            `<div class="species-item native-species">${species}</div>`
+                        ).join('')}
+                    </div>
+                `;
+            }
+            
+            detailsHTML += `
+                </div>
+                
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-value">${plot.invasiveSpecies.length + plot.nativeSpecies.length}</div>
+                        <div class="stat-label">Total Species</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${plot.invasivePercent}%</div>
+                        <div class="stat-label">Invasive Cover</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${plot.invasiveSpecies.length}</div>
+                        <div class="stat-label">Invasive Spp.</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${plot.nativeSpecies.length}</div>
+                        <div class="stat-label">Native Spp.</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('plotDetails').innerHTML = detailsHTML;
+        }
+        
+        // Toggle handlers
+        document.getElementById('invasiveToggle').addEventListener('change', () => {
+            if (selectedPlot) {
+                selectPlot(selectedPlot);
+            }
+        });
+        
+        document.getElementById('nativeToggle').addEventListener('change', () => {
+            if (selectedPlot) {
+                selectPlot(selectedPlot);
+            }
+        });
+        
+        document.getElementById('boundaryToggle').addEventListener('change', (e) => {
+            if (!map) return;
+            
+            if (e.target.checked) {
+                // Show all plot boundaries
+                Object.values(boundaryLayers).forEach(polygon => {
+                    polygon.addTo(map);
+                });
+            } else {
+                // Hide all plot boundaries
+                Object.values(boundaryLayers).forEach(polygon => {
+                    map.removeLayer(polygon);
+                });
+            }
+        });
+        
+        document.getElementById('coverageToggle').addEventListener('change', (e) => {
+            if (!map) return;
+            
+            if (e.target.checked) {
+                // Add heat map overlay
+                plotData.forEach(plot => {
+                    const intensity = plot.invasivePercent / 100;
+                    const radius = 5000;
+                    
+                    const circle = L.circle([plot.lat, plot.lon], {
+                        color: 'red',
+                        fillColor: '#ff6b6b',
+                        fillOpacity: intensity * 0.5,
+                        radius: radius,
+                        weight: 1
+                    }).addTo(map).bindPopup(`${plot.name}: ${plot.invasivePercent}% invasive`);
+                    
+                    heatmapLayers.push(circle);
+                });
+            } else {
+                // Remove heat map layers
+                heatmapLayers.forEach(layer => {
+                    map.removeLayer(layer);
+                });
+                heatmapLayers = [];
+            }
+        });
+        
+        // Species selector handler
+        document.getElementById('speciesSelector').addEventListener('change', (e) => {
+            const selectedSpecies = e.target.value;
+            if (selectedSpecies) {
+                highlightSpecies(selectedSpecies);
+                // Update side panel to show species info
+                showSpeciesInfo(selectedSpecies);
+            } else {
+                clearSpeciesHighlights();
+                if (selectedPlot) {
+                    selectPlot(selectedPlot);
+                }
+            }
+        });
+        
+        // Show species information in side panel
+        function showSpeciesInfo(speciesName) {
+            const isInvasive = allSpecies.invasive.has(speciesName);
+            const plotsWithSpecies = plotData.filter(plot => 
+                plot.invasiveSpecies.includes(speciesName) || 
+                plot.nativeSpecies.includes(speciesName)
+            );
+            
+            document.getElementById('plotName').textContent = `Species: ${speciesName}`;
+            
+            let detailsHTML = `
+                <div class="info-row">
+                    <span class="info-label">Classification:</span>
+                    <span class="info-value" style="color: ${isInvasive ? '#ff6b6b' : '#51cf66'}">
+                        ${isInvasive ? '⚠️ Invasive Species' : '✓ Native Species'}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Distribution:</span>
+                    <span class="info-value">${plotsWithSpecies.length} plots</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Prevalence:</span>
+                    <span class="info-value">${((plotsWithSpecies.length / plotData.length) * 100).toFixed(1)}% of study area</span>
+                </div>
+                
+                <div class="species-list">
+                    <div class="species-category">
+                        <div class="species-header">
+                            <span>📍 Present at these plots:</span>
+                        </div>
+                        ${plotsWithSpecies.map(plot => `
+                            <div class="species-item" style="background: #f0f0f0; color: #333; cursor: pointer;" 
+                                 onclick="selectPlotById('${plot.id}')">
+                                <strong>${plot.name}</strong><br>
+                                <small>${plot.description}</small><br>
+                                <small style="color: #666;">Co-occurring with ${
+                                    (plot.invasiveSpecies.length + plot.nativeSpecies.length - 1)
+                                } other species</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="stats-summary">
+                    <div class="stat-card">
+                        <div class="stat-value">${plotsWithSpecies.length}</div>
+                        <div class="stat-label">Plots Present</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${plotData.length - plotsWithSpecies.length}</div>
+                        <div class="stat-label">Plots Absent</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('plotDetails').innerHTML = detailsHTML;
+        }
+        
+        // Helper function to select plot by ID
+        window.selectPlotById = function(plotId) {
+            const plot = plotData.find(p => p.id === plotId);
+            if (plot) {
+                selectPlot(plot);
+                if (map && markers[plotId]) {
+                    map.setView([plot.lat, plot.lon], 12);
+                }
+            }
+        };
+        
+        // Initialize
+        populateSpeciesSelector();
+    </script>
+</body>
+</html>
