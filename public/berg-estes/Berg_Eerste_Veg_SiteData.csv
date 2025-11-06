@@ -1,0 +1,181 @@
+Year,SiteCode,Plot,SiteCode_Plot,Quadrant,SiteCode_Plot_Quadrant,GPS_PlotCenter_Latitude,GPS_PlotCenter_Longitude,Date,PercentBareSoil,PercentBareRock,PercentDeadVegetation,PercentLiveVegetation,PercentWater,TotalCover_Check,VegHeight,Comments
+2022,berg,B23,berg_B23,NE,berg_B23_NE,-33.074427,18.831213,2022-10-01,0,5,5,90,0,100,-9999,"GEOLOGY: Malmesbury shale derived alluvium, degraded riverbank, silty sand. ; GD: Acacia saligna, Eucalyptus camaldulensis, Phragmites australis above riverbank."
+2022,eerste,E1,eerste_E1,NE,eerste_E1_NE,-33.973953,18.785541,2022-09-19,0,50,0,50,0,100,-9999,"GEOLOGY: table mountain sandstone ; GD: In alluvial soil with table mountain sandstone, pollution (trash), construction nearby (30m across stream)"
+2022,eerste,E2,eerste_E2,NE,eerste_E2_NE,-33.92015,18.879407,2022-09-19,0,0,0,100,0,100,-9999,GEOLOGY: Alluvial soils over cape granite ; GD: Principally pennisetum clandestinum with nasturtium and some gallium hisuture
+2022,eerste,E4,eerste_E4,NE,eerste_E4_NE,-33.985262,18.955305,2022-09-20,0,0,2,98,0,100,-9999,"GEOLOGY: Table mountain sandstone and alluvial silts ; GD: Bounlders of TMS in the river. Sandstone alluvial terrace. Recently burnt. Brabejium stellatifolia, Hartogia schinoides, Rowena lucida, Danthonia sp., Restio eleocharis, Elegia capensis, Pterida aquilimum, Restio subvertiallata. c. 2 years post fire"
+2023,berg,B4,berg_B4,NW,berg_B4_NW,-33.947179,19.116191,2023-11-01,0,10,15,75,0,100,120,NA
+2023,berg,B4,berg_B4,NE,berg_B4_NE,-33.947179,19.116191,2023-11-01,0,10,15,75,0,100,120,NA
+2023,berg,B4,berg_B4,SW,berg_B4_SW,-33.947179,19.116191,2023-11-01,4,5,8,83,0,100,120,NA
+2023,berg,B4,berg_B4,SE,berg_B4_SE,-33.947179,19.116191,2023-11-01,0,12,10,78,0,100,120,NA
+2023,berg,B5,berg_B5,NW,berg_B5_NW,-33.916915,19.112254,2023-11-01,0,0,0,100,0,100,60,NA
+2023,berg,B5,berg_B5,NE,berg_B5_NE,-33.916915,19.112254,2023-11-01,0,0,10,90,0,100,60,NA
+2023,berg,B5,berg_B5,SW,berg_B5_SW,-33.916915,19.112254,2023-11-01,0,0,0,100,0,100,60,NA
+2023,berg,B5,berg_B5,SE,berg_B5_SE,-33.916915,19.112254,2023-11-01,0,0,15,85,0,100,60,NA
+2023,berg,B6,berg_B6,NW,berg_B6_NW,-33.899861,19.053085,2023-11-01,2,0,5,93,0,100,200,NA
+2023,berg,B6,berg_B6,NE,berg_B6_NE,-33.899861,19.053085,2023-11-01,2,0,8,90,0,100,200,NA
+2023,berg,B6,berg_B6,SW,berg_B6_SW,-33.899861,19.053085,2023-11-01,10,3,10,77,0,100,200,NA
+2023,berg,B6,berg_B6,SE,berg_B6_SE,-33.899861,19.053085,2023-11-01,10,0,15,75,0,100,200,NA
+2023,berg,B7,berg_B7,NW,berg_B7_NW,-33.876148,19.031114,2023-11-01,0,0,10,90,0,100,100,NA
+2023,berg,B7,berg_B7,NE,berg_B7_NE,-33.876148,19.031114,2023-11-01,0,0,10,90,0,100,100,NA
+2023,berg,B7,berg_B7,SW,berg_B7_SW,-33.876148,19.031114,2023-11-01,0,0,10,90,0,100,100,NA
+2023,berg,B7,berg_B7,SE,berg_B7_SE,-33.876148,19.031114,2023-11-01,0,0,10,90,0,100,100,NA
+2023,berg,Gauge1160295,berg_Gauge1160295,NW,berg_Gauge1160295_NW,-33.890753,19.07832,2023-11-01,30,0,0,70,0,100,-9999,NA
+2023,berg,Gauge1160295,berg_Gauge1160295,NE,berg_Gauge1160295_NE,-33.890753,19.07832,2023-11-01,15,0,0,85,0,100,-9999,NA
+2023,berg,Gauge1160295,berg_Gauge1160295,SW,berg_Gauge1160295_SW,-33.890753,19.07832,2023-11-01,5,0,15,80,0,100,-9999,NA
+2023,berg,Gauge1160295,berg_Gauge1160295,SE,berg_Gauge1160295_SE,-33.890753,19.07832,2023-11-01,0,0,20,80,0,100,-9999,NA
+2023,berg,Gauge1160263,berg_Gauge1160263,NW,berg_Gauge1160263_NW,-33.708054,18.973949,2023-11-02,20,0,5,75,0,100,500,500cm trees 30cm understory height
+2023,berg,Gauge1160263,berg_Gauge1160263,NE,berg_Gauge1160263_NE,-33.708054,18.973949,2023-11-02,60,0,0,40,0,100,500,500cm trees 30cm understory height
+2023,berg,Gauge1160263,berg_Gauge1160263,SW,berg_Gauge1160263_SW,-33.708054,18.973949,2023-11-02,20,0,20,60,0,100,500,500cm trees 30cm understory height
+2023,berg,Gauge1160263,berg_Gauge1160263,SE,berg_Gauge1160263_SE,-33.708054,18.973949,2023-11-02,30,0,10,60,0,100,500,500cm trees 30cm understory height
+2023,berg,B8,berg_B8,NW,berg_B8_NW,-33.774124,18.973711,2023-11-03,30,0,0,70,0,100,120,NA
+2023,berg,B8,berg_B8,NE,berg_B8_NE,-33.774124,18.973711,2023-11-03,50,0,0,50,0,100,120,NA
+2023,berg,B8,berg_B8,SW,berg_B8_SW,-33.774124,18.973711,2023-11-03,50,0,0,50,0,100,120,NA
+2023,berg,B8,berg_B8,SE,berg_B8_SE,-33.774124,18.973711,2023-11-03,50,0,0,50,0,100,120,NA
+2023,berg,B9,berg_B9,NW,berg_B9_NW,-33.757707,18.986982,2023-11-03,0,0,15,85,0,100,100,NA
+2023,berg,B9,berg_B9,NE,berg_B9_NE,-33.757707,18.986982,2023-11-03,0,0,10,90,0,100,100,NA
+2023,berg,B9,berg_B9,SW,berg_B9_SW,-33.757707,18.986982,2023-11-03,0,0,10,90,0,100,100,NA
+2023,berg,B9,berg_B9,SE,berg_B9_SE,-33.757707,18.986982,2023-11-03,0,0,10,90,0,100,100,NA
+2023,berg,B11,berg_B11,NW,berg_B11_NW,-33.634573,18.978898,2023-11-03,0,0,2,98,0,100,40,NA
+2023,berg,B11,berg_B11,NE,berg_B11_NE,-33.634573,18.978898,2023-11-03,0,0,0,100,0,100,40,NA
+2023,berg,B11,berg_B11,SW,berg_B11_SW,-33.634573,18.978898,2023-11-03,0,0,5,95,0,100,40,NA
+2023,berg,B11,berg_B11,SE,berg_B11_SE,-33.634573,18.978898,2023-11-03,0,0,5,95,0,100,40,NA
+2023,berg,B10,berg_B10,NW,berg_B10_NW,-33.750405,18.968584,2023-11-04,0,0,0,100,0,100,120,NA
+2023,berg,B10,berg_B10,NE,berg_B10_NE,-33.750405,18.968584,2023-11-04,0,0,0,100,0,100,120,NA
+2023,berg,B10,berg_B10,SW,berg_B10_SW,-33.750405,18.968584,2023-11-04,0,0,5,95,0,100,120,NA
+2023,berg,B10,berg_B10,SE,berg_B10_SE,-33.750405,18.968584,2023-11-04,0,0,0,100,0,100,120,NA
+2023,berg,B13,berg_B13,NW,berg_B13_NW,-33.6194855,18.9720958,2023-11-04,0,0,10,90,0,100,200,NA
+2023,berg,B13,berg_B13,NE,berg_B13_NE,-33.6194855,18.9720958,2023-11-04,0,0,20,80,0,100,200,NA
+2023,berg,B13,berg_B13,SW,berg_B13_SW,-33.6194855,18.9720958,2023-11-04,0,0,5,95,0,100,200,NA
+2023,berg,B13,berg_B13,SE,berg_B13_SE,-33.6194855,18.9720958,2023-11-04,0,0,25,75,0,100,200,NA
+2023,berg,B14,berg_B14,NW,berg_B14_NW,-33.561014,18.948679,2023-11-04,15,15,35,35,0,100,-9999,NA
+2023,berg,B14,berg_B14,NE,berg_B14_NE,-33.561014,18.948679,2023-11-04,15,15,35,35,0,100,-9999,NA
+2023,berg,B14,berg_B14,SW,berg_B14_SW,-33.561014,18.948679,2023-11-04,0,0,10,90,0,100,-9999,NA
+2023,berg,B14,berg_B14,SE,berg_B14_SE,-33.561014,18.948679,2023-11-04,5,5,30,60,0,100,-9999,NA
+2023,berg,B21,berg_B21,NW,berg_B21_NW,-33.162516,18.891584,2023-11-05,30,0,60,10,0,100,32,NA
+2023,berg,B21,berg_B21,NE,berg_B21_NE,-33.162516,18.891584,2023-11-05,2,2,91,5,0,100,32,NA
+2023,berg,B21,berg_B21,SW,berg_B21_SW,-33.162516,18.891584,2023-11-05,25,0,55,20,0,100,32,NA
+2023,berg,B21,berg_B21,SE,berg_B21_SE,-33.162516,18.891584,2023-11-05,0,0,75,25,0,100,32,NA
+2023,berg,B24,berg_B24,NW,berg_B24_NW,-33.04552,18.842559,2023-11-05,5,0,80,15,0,100,30,NA
+2023,berg,B24,berg_B24,NE,berg_B24_NE,-33.04552,18.842559,2023-11-05,0,0,75,25,0,100,30,NA
+2023,berg,B24,berg_B24,SW,berg_B24_SW,-33.04552,18.842559,2023-11-05,5,0,20,75,0,100,30,NA
+2023,berg,B24,berg_B24,SE,berg_B24_SE,-33.04552,18.842559,2023-11-05,0,0,65,35,0,100,30,NA
+2023,berg,B26,berg_B26,NW,berg_B26_NW,-33.047176,18.831404,2023-11-05,0,0,0,100,0,100,400,NA
+2023,berg,B26,berg_B26,NE,berg_B26_NE,-33.047176,18.831404,2023-11-05,0,0,0,90,10,90,400,10% water
+2023,berg,B26,berg_B26,SW,berg_B26_SW,-33.047176,18.831404,2023-11-05,0,0,0,100,0,100,400,NA
+2023,berg,B26,berg_B26,SE,berg_B26_SE,-33.047176,18.831404,2023-11-05,0,0,0,100,0,100,400,NA
+2023,berg,B23,berg_B23,NW,berg_B23_NW,-33.074433,18.83122,2023-11-06,0,0,65,35,0,100,40,NA
+2023,berg,B23,berg_B23,NE,berg_B23_NE,-33.074433,18.83122,2023-11-06,0,0,80,20,0,100,40,NA
+2023,berg,B23,berg_B23,SW,berg_B23_SW,-33.074433,18.83122,2023-11-06,0,0,90,10,0,100,40,NA
+2023,berg,B23,berg_B23,SE,berg_B23_SE,-33.074433,18.83122,2023-11-06,5,0,75,20,0,100,40,NA
+2023,berg,B25,berg_B25,NW,berg_B25_NW,-33.038495,18.849955,2023-11-06,0,75,0,25,0,100,10,** Rock % includes water covered rocks
+2023,berg,B25,berg_B25,NE,berg_B25_NE,-33.038495,18.849955,2023-11-06,0,35,5,60,0,100,10,** Rock % includes water covered rocks
+2023,berg,B25,berg_B25,SW,berg_B25_SW,-33.038495,18.849955,2023-11-06,0,75,5,20,0,100,10,** Rock % includes water covered rocks
+2023,berg,B25,berg_B25,SE,berg_B25_SE,-33.038495,18.849955,2023-11-06,0,65,0,35,0,100,10,** Rock % includes water covered rocks
+2023,berg,B27,berg_B27,NW,berg_B27_NW,-33.024213,18.80345,2023-11-06,32,0,0,68,0,100,25,NA
+2023,berg,B27,berg_B27,NE,berg_B27_NE,-33.024213,18.80345,2023-11-06,49,0,0,51,0,100,25,NA
+2023,berg,B27,berg_B27,SW,berg_B27_SW,-33.024213,18.80345,2023-11-06,37,0,5,58,0,100,25,NA
+2023,berg,B27,berg_B27,SE,berg_B27_SE,-33.024213,18.80345,2023-11-06,40,0,5,55,0,100,25,NA
+2023,berg,B22,berg_B22,NW,berg_B22_NW,-33.136526,18.861943,2023-11-07,5,0,50,45,0,100,140,NA
+2023,berg,B22,berg_B22,NE,berg_B22_NE,-33.136526,18.861943,2023-11-07,15,0,45,40,0,100,140,NA
+2023,berg,B22,berg_B22,SW,berg_B22_SW,-33.136526,18.861943,2023-11-07,10,0,50,40,0,100,140,NA
+2023,berg,B22,berg_B22,SE,berg_B22_SE,-33.136526,18.861943,2023-11-07,5,0,20,75,0,100,140,NA
+2023,berg,B29,berg_B29,NW,berg_B29_NW,-32.9966,18.779283,2023-11-07,5,0,25,70,0,100,40,NA
+2023,berg,B29,berg_B29,NE,berg_B29_NE,-32.9966,18.779283,2023-11-07,10,0,5,85,0,100,40,NA
+2023,berg,B29,berg_B29,SW,berg_B29_SW,-32.9966,18.779283,2023-11-07,15,3,20,62,0,100,40,NA
+2023,berg,B29,berg_B29,SE,berg_B29_SE,-32.9966,18.779283,2023-11-07,5,0,10,85,0,100,40,NA
+2023,berg,Gauge1160266,berg_Gauge1160266,NW,berg_Gauge1160266_NW,-33.130464,18.863677,2023-11-07,10,0,0,90,0,100,240,"Young plot, many saplings, or non-disgnostic leaves. Identification is thus very high-level"
+2023,berg,Gauge1160266,berg_Gauge1160266,NE,berg_Gauge1160266_NE,-33.130464,18.863677,2023-11-07,10,0,0,90,0,100,240,"Young plot, many saplings, or non-disgnostic leaves. Identification is thus very high-level"
+2023,berg,Gauge1160266,berg_Gauge1160266,SW,berg_Gauge1160266_SW,-33.130464,18.863677,2023-11-07,0,0,0,100,0,100,240,"Young plot, many saplings, or non-disgnostic leaves. Identification is thus very high-level"
+2023,berg,Gauge1160266,berg_Gauge1160266,SE,berg_Gauge1160266_SE,-33.130464,18.863677,2023-11-07,10,0,0,90,0,100,240,"Young plot, many saplings, or non-disgnostic leaves. Identification is thus very high-level"
+2023,berg,B18,berg_B18,NW,berg_B18_NW,-33.306049,19.100821,2023-11-08,5,0,15,70,10,90,300,10% water
+2023,berg,B18,berg_B18,NE,berg_B18_NE,-33.306049,19.100821,2023-11-08,10,5,0,50,35,65,300,35% water
+2023,berg,B18,berg_B18,SW,berg_B18_SW,-33.306049,19.100821,2023-11-08,0,15,0,85,0,100,300,NA
+2023,berg,B18,berg_B18,SE,berg_B18_SE,-33.306049,19.100821,2023-11-08,0,10,0,40,50,50,300,50% water
+2023,berg,B28,berg_B28,NW,berg_B28_NW,-33.025769,18.787933,2023-11-08,42,0,30,28,0,100,100,NA
+2023,berg,B28,berg_B28,NE,berg_B28_NE,-33.025769,18.787933,2023-11-08,15,0,30,55,0,100,100,NA
+2023,berg,B28,berg_B28,SW,berg_B28_SW,-33.025769,18.787933,2023-11-08,15,0,35,50,0,100,100,NA
+2023,berg,B28,berg_B28,SE,berg_B28_SE,-33.025769,18.787933,2023-11-08,20,0,40,40,0,100,100,NA
+2023,berg,Gauge1160265,berg_Gauge1160265,NW,berg_Gauge1160265_NW,-33.311871,19.074036,2023-11-08,40,0,10,50,0,100,40,NA
+2023,berg,Gauge1160265,berg_Gauge1160265,NE,berg_Gauge1160265_NE,-33.311871,19.074036,2023-11-08,20,5,15,60,0,100,40,NA
+2023,berg,Gauge1160265,berg_Gauge1160265,SW,berg_Gauge1160265_SW,-33.311871,19.074036,2023-11-08,35,0,15,50,0,100,40,NA
+2023,berg,Gauge1160265,berg_Gauge1160265,SE,berg_Gauge1160265_SE,-33.311871,19.074036,2023-11-08,10,5,15,70,0,100,40,NA
+2023,berg,B17,berg_B17,NW,berg_B17_NW,-33.311198,19.111033,2023-11-09,0,0,0,100,0,100,100,NA
+2023,berg,B17,berg_B17,NE,berg_B17_NE,-33.311198,19.111033,2023-11-09,0,0,0,90,10,90,100,10% water
+2023,berg,B17,berg_B17,SW,berg_B17_SW,-33.311198,19.111033,2023-11-09,5,0,15,80,0,100,100,NA
+2023,berg,B17,berg_B17,SE,berg_B17_SE,-33.311198,19.111033,2023-11-09,0,0,5,95,0,100,100,NA
+2023,berg,B19,berg_B19,NW,berg_B19_NW,-33.219568,18.976087,2023-11-09,70,0,0,30,0,100,40,NA
+2023,berg,B19,berg_B19,NE,berg_B19_NE,-33.219568,18.976087,2023-11-09,45,0,10,45,0,100,40,NA
+2023,berg,B19,berg_B19,SW,berg_B19_SW,-33.219568,18.976087,2023-11-09,70,0,0,30,0,100,40,NA
+2023,berg,B19,berg_B19,SE,berg_B19_SE,-33.219568,18.976087,2023-11-09,40,0,0,60,0,100,40,NA
+2023,berg,B20,berg_B20,NW,berg_B20_NW,-33.20167,18.93136,2023-11-09,0,0,0,100,0,100,2000,"20m canopy, 30cm grass"
+2023,berg,B20,berg_B20,NE,berg_B20_NE,-33.20167,18.93136,2023-11-09,5,0,0,95,0,100,2000,"20m canopy, 30cm grass"
+2023,berg,B20,berg_B20,SW,berg_B20_SW,-33.20167,18.93136,2023-11-09,0,0,0,100,0,100,2000,"20m canopy, 30cm grass"
+2023,berg,B20,berg_B20,SE,berg_B20_SE,-33.20167,18.93136,2023-11-09,0,0,0,100,0,100,2000,"20m canopy, 30cm grass"
+2023,berg,B15,berg_B15,NW,berg_B15_NW,-33.54205,18.92734,2023-11-10,0,0,0,100,0,100,280,NA
+2023,berg,B15,berg_B15,NE,berg_B15_NE,-33.54205,18.92734,2023-11-10,0,0,0,100,0,100,280,NA
+2023,berg,B15,berg_B15,SW,berg_B15_SW,-33.54205,18.92734,2023-11-10,0,0,0,100,0,100,280,NA
+2023,berg,B15,berg_B15,SE,berg_B15_SE,-33.54205,18.92734,2023-11-10,0,0,0,100,0,100,280,NA
+2023,berg,B16,berg_B16,NW,berg_B16_NW,-33.524713,18.931724,2023-11-10,0,0,5,95,0,100,-9999,NA
+2023,berg,B16,berg_B16,NE,berg_B16_NE,-33.524713,18.931724,2023-11-10,0,0,5,95,0,100,-9999,NA
+2023,berg,B16,berg_B16,SW,berg_B16_SW,-33.524713,18.931724,2023-11-10,0,0,5,95,0,100,-9999,NA
+2023,berg,B16,berg_B16,SE,berg_B16_SE,-33.524713,18.931724,2023-11-10,0,0,15,85,0,100,-9999,NA
+2023,berg,B12,berg_B12,NW,berg_B12_NW,-33.627415,18.977104,2023-11-11,15,0,0,85,0,100,80,NA
+2023,berg,B12,berg_B12,NE,berg_B12_NE,-33.627415,18.977104,2023-11-11,35,0,0,65,0,100,80,NA
+2023,berg,B12,berg_B12,SW,berg_B12_SW,-33.627415,18.977104,2023-11-11,25,0,15,60,0,100,80,NA
+2023,berg,B12,berg_B12,SE,berg_B12_SE,-33.627415,18.977104,2023-11-11,15,0,0,85,0,100,80,NA
+2022,eerste,E3,eerste_E3,NE,eerste_E3_NE,-33.963594,18.920261,2022-09-20,0,0,10,90,0,100,-9999,"GEOLOGY: Weathered cape granite ; GD: Degraded river bank/ forest margin almost completeky invaded by non-indigenous species, only indigenous species= Brebajium stellatifolia and Kiggelaria africana"
+2022,berg,B2,berg_B2,NE,berg_B2_NE,-33.967539,19.080301,2022-09-21,0,0,0,100,0,100,-9999,"GD: Disturbed storm-washed riverine scree with pioneer grasses (merxmullera cincta, pentaschistus sp, pelargonium graveolens, Podalyria calytrops, Rhodacoma sp., Thesium strictum, Senecio ptero. Invasion of Ageratina adeusphora"
+2022,berg,B3,berg_B3,NE,berg_B3_NE,-33.955123,19.073427,2022-09-21,0,50,5,45,0,100,-9999,"GEOLOGY: Table mountain Sandstone, alluvial boulders ; GD: water-rounded boulders of tms, steep river 35 degree slope."
+2022,berg,B5,berg_B5,NE,berg_B5_NE,-33.916853,19.112168,2022-09-23,0,0,0,100,0,100,-9999,"GEOLOGY: Alluvial and table mountain sandstone rocks ; GD: Alluvial soils with rocks of tms in deep soils. Dominated by invasive kikuyu grass (Pennisetum clandestinum) and nasturtium and Rubus sp, and Galium sp, and Quercus robur and Vinca major"
+2022,berg,B6,berg_B6,NE,berg_B6_NE,-33.899891,19.0530101,2022-09-23,0,20,10,70,0,100,-9999,GEOLOGY: Alluvial terrace with waterworn TMS rocks ; GD: Dense Cannamois virgata with some Prionium serratum and Brabejium stellarifolia
+2022,berg,Gauge1160295,berg_Gauge1160295,NE,berg_Gauge1160295_NE,-33.890852,19.078233,2022-09-23,0,0,0,100,0,100,-9999,"GEOLOGY: Alluvial sands, TMS stones, and bare litter plus sticks ; GD: Alluvial downstream of Gauge (weir) invasive tree species (Robinia, Melia azadarch, Acacia melaoxylon, Acacia meansii. Understory of nasturtium, flood debris, Galium sp. and Basella. Euphorbis peplus. Searsia angustifolia around, but not in plot"
+2022,berg,B4,berg_B4,NE,berg_B4_NE,-33.947369,19.116328,2022-09-24,-9999,-9999,-9999,-9999,0,-9999,-9999,"GD: Alluvial river bank with water worn boulder of TMS. Passerina rigida/ Cliffortia/ Resio invaded by Acacia meansii, Acacia longifolia and Pinus pinaster"
+2022,berg,B7,berg_B7,NE,berg_B7_NE,-33.876071,19.031122,2022-09-24,-9999,-9999,-9999,-9999,0,-9999,-9999,"GEOLOGY: fine alluvial sediment ; GD: Fine alluvial sedimet on northern bank of Berg River. Lower (?) grass dominane floodplain vs opposite bank, higher elevation with common reed (phragmites), metrosideros and restios. ; ? = Issue of Dead Biomass vs dead plants"
+2022,berg,B8,berg_B8,NE,berg_B8_NE,-33.774221,18.973113,2022-09-24,0,0,0,100,0,100,-9999,"GD: Alluvial silts between Berg river and golf course. A few TMS boulder. Pennisetum macrocourum, Avena barbata, Echium plantginum, Bromus diandrus and Festuca myuros. Galium at edges of bank and Persicaria and Myrophyllum in island. Berg lined by Salix, lots of Myriophyllum aquaticum at waters edge. "
+2022,berg,B9,berg_B9,NE,berg_B9_NE,-33.757649,18.986887,2022-09-24,0,5,5,90,0,95,-9999,"GEOLOGY: Alluvium ; GD: Alluvial floodplain, waterworn rocks (ferric sandstone), Lupinus angustifolius, grasses, riverbank with introduced trees (Acacia meansii, Acacia longifolia, Eucalyptus camaldulensis, Melia azadarach). Plantago lanceolata, Raphiinus raphinustrum, Geranium purpuruea, Briza maxima"
+2022,berg,B10,berg_B10,NE,berg_B10_NE,-33.750237,18.968635,2022-09-25,0,0,0,100,0,100,-9999,"Geology: Alluvium ; GD: silty island in the middle of the Berg River, short lived grasses and forbs. No trees"
+2022,berg,Gauge1160263,berg_Gauge1160263,NE,berg_Gauge1160263_NE,-33.708002,18.974031,2022-09-25,0,0,20,80,0,100,-9999,"GEOLOGY: Alluvial soils, some TMS boulders ; GD: Alluvium against artificial bank/wall above weir. Salix and Eucalyptus camaldulensis with Persicaria and Commelina berghalensis, Remex crispus, Verbena brasiliensis, and Urtica urens.  Ricinus communis, Typha latiflolia, Acer negundo and Sesbania sesban"
+2022,berg,B11,berg_B11,NE,berg_B11_NE,-33.634466,18.978913,2022-09-25,0,0,0,100,0,100,-9999,"GEOLOGY: sandy artificial levee ; GD: Berm (levee) between Berg River and decisuous fruit fields with grasses (Avena sativa), Acer negundo, Celtis africana, Eucalyptus camaldulensis, and Loquat"
+2022,berg,B12,berg_B12,NE,berg_B12_NE,-33.627393,18.976533,2022-09-25,20,0,5,75,0,100,-9999,"GEOLOGY: Alluvial asand ; GD: Disturbed river bank, vehicle tracks, recent felling of massive Eucalyptus camaldulensis, Silybum marianum, Raphanus raphanistrum, Fumaria capredata, Fumaria morales, Senecio pterophorum"
+2022,berg,B13,berg_B13,NE,berg_B13_NE,-33.619317,18.972228,2022-09-26,0,0,10,90,0,100,-9999,"GEOLOGY: Deep alluvial silts, TMS waterworn rocks in riverbed ; GD:  Steep (45 degree) bank of Berg river with invasive species (Tropaeoleom majus, Echium plantagineum, Senecio pterophorus, xanthium strumarium, Solanum nigrum, Raphanus raphanistrum. Recent felling of Eucalyptus camaldulensis along river banks"
+2022,berg,B14,berg_B14,NE,berg_B14_NE,-33.561097,18.948692,2022-09-26,0,0,0,100,0,100,-9999,"GEOLOGY: Alluvial clay-rich silts. Degraded alluvial terrace ; GD: Eucalyptus plautatum on NE bank. Searsia chiridensis planted in bank near Arboretum nursery, Echium plantagineum, Erodium moschatum, Raphanu raphinistrum, and grasses (Avena sativa, Ehrharta longiflora)"
+2022,berg,B15,berg_B15,NE,berg_B15_NE,-33.542114,18.927067,2022-09-26,0,0,95,5,0,100,-9999,GEOLOGY: Silt derived from bokkevelal shale ; GD: Monodominant Phragmites australis wetland with woody debris from previous flood.
+2022,berg,B16,berg_B16,NE,berg_B16_NE,-33.524514,18.93173,2022-09-27,0,0,20,80,0,100,-9999,"GEOLOGY; Alluvial sands (TMS and Bokkeveld shales) Sandy strip ; GD: With Xanthium strumarium, Acacia karoo. Kigellaria africana, Olea europaea, Lolium perenne, Acacia meansii, Rumex crispus, Raphanus raphinistrum. Working for water recently here- cleared Eucalyptus camaldulensis"
+2022,berg,B17,berg_B17,NE,berg_B17_NE,-33.311316,19.111144,2022-09-27,0,5,35,60,0,100,-9999,"GD: Not in uniform patch, natural margin is very thin, massive litter deposition in NE quadrant from flooding."
+2022,berg,B18,berg_B18,NE,berg_B18_NE,-33.306377,19.10106,2022-09-27,1,0,60,39,0,100,-9999,"GEOLOGY: Rich (clay rich) alluvial soil ; GD: River banks invaded by Acacia meansii, Eucalyptus camaldulensis, Acacia longiflora. Thick Phragmites australis, some Salix sp. and Pinus sp.. Further up bank Echium plantagineum"
+2022,berg,Gauge1160265,berg_Gauge1160265,NE,berg_Gauge1160265_NE,-33.31174,19.07389,2022-09-27,0,10,2,88,0,100,-9999,"GEOLOGY: Sandy alluvium, Malmesbury series derival. ; GD: disturbed areas with Asteraceae (artotheca calensula and dimorphotheca pluvialis), shrubs (Searsia undullata) with Oxalis pes-caprae in herb layer. Some rowena lucida. Hypochaeris glabra"
+2022,berg,B19,berg_B19,NE,berg_B19_NE,-33.220212,18.97667,2022-09-28,70,0,5,25,0,100,-9999,"GEOLOGY: alluvial, rocks of Kliphenwel formation, disturbed sand alluvium. ; GD: Dominated by annual compositae with sone Galium shrubs. River bank dominated by Eucapyptus camaldulensis and Acacia saliyana with a few clumps of Cyperus textilus"
+2022,berg,B20,berg_B20,NE,berg_B20_NE,-33.202009,18.973113,2022-09-28,0,0,5,95,0,100,-9999,"GEOLOGY: Alluvial silt from malmesbury shale. Alluvial silt, clay rich, derived of Malmesbury shale. ; GD: river margin (Phragmites australis, ocasional Prionium serrati, with dense Persecaria (Polygonum sp. [EDIT = Persecaria attentnata]), Eucalyptus camaldulensis and some sesbania sesban. Dense grass (Lolium perenne) scattered Amaryllis belladonna"
+2022,berg,B21,berg_B21,NE,berg_B21_NE,-33.162966,18.89156,2022-09-28,10,0,1,89,0,100,-9999,"GEOLOGY: Alluvial sands of malmesburt shales. ; GD: flanking (?) watercourse between wheat fields. Highly disturned site dominated by Avena sative, Senecio burchallii, Setaria verticillata along streambed in wet soil, Sonchus oleracea, and scattered Ornithogalum with Cynodon dactylon. Lots of musk rat activity"
+2022,berg,B24,berg_B24,NE,berg_B24_NE,-33.0454428,18.8426108,2022-09-29,0,20,5,75,0,100,-9999,"GEOLOGY:  Alluvium derived from Malmebury shales, seasonal drainage line. ; GD: stagnant pools and Phragmites australis, Cotula at ground level with Sporobolus capensis, Avena sative, Lolium perenne, Galenium africanum and Oncosiphon suffruticosum."
+2022,berg,B25a,berg_B25a,NE,berg_B25a_NE,-33.038479,18.849975,2022-09-29,0,80,5,15,0,100,-9999,"GEOLOGY: Malmesbury shale, flat exposed malmesbury shale ; GD: Dense phragmites australis, grasses (Sporobolus aff. capensis, Lolium perenne), Juncus kransii, Cotula coronopifolia, Acacia saligna, Senecio pterophorus"
+2022,berg,B26,berg_B26,NE,berg_B26_NE,-33.046934,18.831367,2022-09-29,25,0,10,65,0,100,-9999,"GEOLOGY: Cement impeding drainage, heavy clay soils derived from malmesbury shales ; GD: Phragmites australis in river course. At esge P. australis with understory of Lactuca, Vicia, Erodium moschatum, Raphanus raphinistrum, Carthamnus, Lolium perenne, and Rumex crispus"
+2022,berg,B29,berg_B29,NE,berg_B29_NE,-32.996684,18.779275,2022-09-29,0,0,0,100,0,100,-9999,"GEOLOGY: Alluvium Malmesbury shale clay ; GD: steep raised river bank, heavy Malmesbury shale clay. Grass dominated by Cynodon dactylon, Kikuyu (pennisetum clandestinum (cenchrus), Cotula corocipifolia, a little cotula turbinata, Ornithogalum pursoides, Cyperess textilus, lots pf Salic capensis, a river bank with Acacia meansii and Schinus molle. Plus Juncus kraussii"
+2023,eerste,E2,eerste_E2,NW,eerste_E2_NW,-33.920127,18.879482,2023-10-29,20,0,0,80,0,100,350,"350cm canopy , 40cm understory height"
+2023,eerste,E2,eerste_E2,NE,eerste_E2_NE,-33.920127,18.879482,2023-10-29,0,0,0,100,0,100,350,"350cm canopy , 40cm understory height"
+2023,eerste,E2,eerste_E2,SW,eerste_E2_SW,-33.920127,18.879482,2023-10-29,0,0,0,100,0,100,350,"350cm canopy , 40cm understory height"
+2023,eerste,E2,eerste_E2,SE,eerste_E2_SE,-33.920127,18.879482,2023-10-29,0,0,0,100,0,100,350,"350cm canopy , 40cm understory height"
+2023,eerste,E3,eerste_E3,NW,eerste_E3_NW,-33.96341,18.920427,2023-10-29,0,0,0,100,0,100,3000,"3000cm canopy, 20cm understory"
+2023,eerste,E3,eerste_E3,NE,eerste_E3_NE,-33.96341,18.920427,2023-10-29,0,0,0,100,0,100,3000,"3000cm canopy, 20cm understory"
+2023,eerste,E3,eerste_E3,SW,eerste_E3_SW,-33.96341,18.920427,2023-10-29,0,0,0,100,0,100,3000,"3000cm canopy, 20cm understory"
+2023,eerste,E3,eerste_E3,SE,eerste_E3_SE,-33.96341,18.920427,2023-10-29,0,0,0,100,0,100,3000,"3000cm canopy, 20cm understory"
+2022,berg,B22,berg_B22,NE,berg_B22_NE,-33.136747,18.861885,2022-09-30,0,20,5,75,0,100,-9999,"GEOLOGY: sandy soil ; GD: Under canopy of Eucalyptus camaldulensis, Melianthus major, Olea europaea, L. subpafricana"
+2022,berg,Gauge1160266,berg_Gauge1160266,NE,berg_Gauge1160266_NE,-33.13036,18.863515,2022-09-30,0,0,5,95,0,100,-9999,"GEOLOGY: no rocks, silty soil. ; GD: shrubby Gallenium africanum plot, silty soil, below slope 45%. Buddleja saliyna, Melianthus major, Eucalyptus camaldulensis, Arum Lily, Sidanum guinese, Phragmites australis, Rhus angustifolius."
+2022,berg,B27,berg_B27,NE,berg_B27_NE,-33.024162,18.803421,2022-09-30,0,0,90,10,0,100,-9999,"GEOLOGY: Malmesbury shale. Sloping malmesbury shale with quartzite. ; GD: wheat fields ploughed to width 3m of dam bank. Highly regraded Erodium mocshatum, Cotula turbinata, Oncosiphon suffruticosa, Capsella bursa-pastaris, Medicago hirsuta, Lactuca hirstua?, Many seasonal annuals dying back"
+2022,berg,B28,berg_B28,NE,berg_B28_NE,-33.025961,18.787717,2022-09-30,5,0,5,90,0,100,-9999,"GEOLOGY: clay rich sands of malmesbury shale, east facing 20 degree slope. ; GD: dominated by Galenia africana, Avena sativa, Lolium perenne, Bromus sp., Echium purpuruea, Tradyandra sp., 2 species of Hermania (althifolia (disermifolia) and scabra), ornithogalum thysoides, and Oxalis pes-caprae"
+2023,eerste,E1,eerste_E1,NW,eerste_E1_NW,-33.973819,18.785825,2023-10-30,5,0,0,95,0,100,-9999,NA
+2023,eerste,E1,eerste_E1,NE,eerste_E1_NE,-33.973819,18.785825,2023-10-30,10,0,0,90,0,100,-9999,NA
+2023,eerste,E1,eerste_E1,SW,eerste_E1_SW,-33.973819,18.785825,2023-10-30,70,0,0,30,0,100,-9999,NA
+2023,eerste,E1,eerste_E1,SE,eerste_E1_SE,-33.973819,18.785825,2023-10-30,30,0,0,70,0,100,-9999,NA
+2023,eerste,E4,eerste_E4,NW,eerste_E4_NW,-33.985431,18.95522,2023-10-30,0,0,5,95,0,100,150,NA
+2023,eerste,E4,eerste_E4,NE,eerste_E4_NE,-33.985431,18.95522,2023-10-30,0,0,5,95,0,100,150,NA
+2023,eerste,E4,eerste_E4,SW,eerste_E4_SW,-33.985431,18.95522,2023-10-30,0,0,0,100,0,100,150,NA
+2023,eerste,E4,eerste_E4,SE,eerste_E4_SE,-33.985431,18.95522,2023-10-30,0,10,10,80,0,100,150,NA
+2023,berg,B2,berg_B2,NW,berg_B2_NW,-33.96755,19.080364,2023-10-31,0,2,5,93,0,100,200,NA
+2023,berg,B2,berg_B2,NE,berg_B2_NE,-33.96755,19.080364,2023-10-31,0,5,10,85,0,100,200,NA
+2023,berg,B2,berg_B2,SW,berg_B2_SW,-33.96755,19.080364,2023-10-31,10,10,30,50,0,100,200,NA
+2023,berg,B2,berg_B2,SE,berg_B2_SE,-33.96755,19.080364,2023-10-31,10,15,10,65,0,100,200,NA
+2023,berg,B3,berg_B3,NW,berg_B3_NW,-33.954947,19.073226,2023-10-31,0,90,0,10,0,100,150,Many rocks covered by water
+2023,berg,B3,berg_B3,NE,berg_B3_NE,-33.954947,19.073226,2023-10-31,0,50,0,50,0,100,150,Many rocks covered by water
+2023,berg,B3,berg_B3,SW,berg_B3_SW,-33.954947,19.073226,2023-10-31,0,90,0,10,0,100,150,Many rocks covered by water
+2023,berg,B3,berg_B3,SE,berg_B3_SE,-33.954947,19.073226,2023-10-31,0,60,0,40,0,100,150,Many rocks covered by water

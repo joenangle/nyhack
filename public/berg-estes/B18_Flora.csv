@@ -1,0 +1,26 @@
+Source,Year,SiteCode,AcceptedSpecies,PercentCoverAlive,PercentCoverDead,PlotCoverage (Y/N),Rarefaction (Y/N),LineIntercept2022 Count,LineIntercept2023 Count
+PlotCoverage,2023,B18,Casuarina cunninghamiana,11.25,,1,1,0,8
+PlotCoverage,2023,B18,Arundo donex,20,,1,1,0,0
+PlotCoverage,2023,B18,Acacia mearnsii,2.5,,1,0,0,0
+PlotCoverage,2023,B18,Cynodon dactylon,2.5,,1,0,0,0
+PlotCoverage,2023,B18,Eucalyptus camaldulensis,28.75,,1,1,0,10
+PlotCoverage,2023,B18,Phragmites australis,9,13.5,1,0,35,0
+Rarefaction,2023,B18,Persicaria,,,0,1,0,0
+Rarefaction,2023,B18,Briza minima,,,0,1,0,0
+Rarefaction,2023,B18,Lolium perenne,,,0,1,0,0
+Rarefaction,2023,B18,Raphanus raphinistrum,,,0,1,0,0
+Rarefaction,2023,B18,Rumex cordatus,,,0,1,0,1
+Rarefaction,2023,B18,Black mustard-like plant,,,0,1,0,0
+Rarefaction,2023,B18,Stelleria media,,,0,1,0,0
+Rarefaction,2023,B18,Ehrharta longiflora,,,0,1,0,0
+Rarefaction,2023,B18,Chickweed,,,0,1,0,0
+Rarefaction,2023,B18,Humeria miralis,,,0,1,0,0
+Rarefaction,2023,B18,Cynodon dactylon,,,0,1,0,0
+Rarefaction,2023,B18,Taraxicum officinale,,,0,1,0,0
+Rarefaction,2023,B18,Lysmackia arvensis,,,0,1,0,0
+Rarefaction,2023,B18,Nightella (aquatic plant),,,0,1,0,0
+Rarefaction,2023,B18,Sesbania sp.,,,0,1,0,0
+Rarefaction,2023,B18,Tough leaved plant (cape star?),,,0,1,0,0
+LineIntercept,2022,B18,Asparagus rubicundus,,,0,0,1,0
+LineIntercept,2022,B18,Carduus pycnocephalus,,,0,0,1,0
+LineIntercept,2022,B18,Fumaria muralis,,,0,0,1,0
